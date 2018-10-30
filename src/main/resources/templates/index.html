@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Конфигуратор</title>
+</head>
+<body>
+<div>
+    <label for="currencies">Валюты</label>
+    <select id="currencies">
+        <option th:each="currency:${allCurrencies}" th:text="${currency.name}" th:value="${currency}"></option>
+    </select>
+</div>
+</body>
+</html>

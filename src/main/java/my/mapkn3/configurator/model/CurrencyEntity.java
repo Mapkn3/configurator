@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "currency")
+@Table(name = "currency_table")
 public class CurrencyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

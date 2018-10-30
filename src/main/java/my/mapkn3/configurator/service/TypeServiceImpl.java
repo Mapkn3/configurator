@@ -23,9 +23,9 @@ public class TypeServiceImpl implements TypeService {
     @Override
     public List<TypeEntity> getAllTypes() {
         List<TypeEntity> types = typeRepository.findAll();
-        log.debug(String.format("Get %d types:%n", types.size()));
+        log.info(String.format("Get %d types:%n", types.size()));
         for (TypeEntity type : types) {
-            log.debug(String.format("%s%n", type.toString()));
+            log.info(String.format("%s%n", type.toString()));
         }
         return types;
     }
@@ -33,10 +33,10 @@ public class TypeServiceImpl implements TypeService {
     @Override
     @Transactional(readOnly = true)
     public TypeEntity getTypeById(long id) {
-        log.debug(String.format("Getting type with id = %d", id));
+        log.info(String.format("Getting type with id = %d", id));
         TypeEntity type = typeRepository.findById(id).orElse(null);
         if (type == null) {
-            log.debug(String.format("Type with id = %d not found", id));
+            log.info(String.format("Type with id = %d not found", id));
         }
         return type;
     }
@@ -44,10 +44,10 @@ public class TypeServiceImpl implements TypeService {
     @Override
     @Transactional(readOnly = true)
     public TypeEntity getTypeByName(String name) {
-        log.debug(String.format("Getting type with name = %s", name));
+        log.info(String.format("Getting type with name = %s", name));
         TypeEntity type = typeRepository.findByName(name).orElse(null);
         if (type == null) {
-            log.debug(String.format("Type with name = %s not found", name));
+            log.info(String.format("Type with name = %s not found", name));
         }
         return type;
     }
@@ -56,12 +56,12 @@ public class TypeServiceImpl implements TypeService {
     public TypeEntity addType(TypeEntity type) {
         TypeEntity entity = typeRepository.findByName(type.getName()).orElse(null);
         if (entity != null) {
-            log.debug(String.format("Type already exist:%n%s", entity.toString()));
+            log.info(String.format("Type already exist:%n%s", entity.toString()));
             return null;
         } else {
-            log.debug(String.format("Add new type:%n%s", type.toString()));
+            log.info(String.format("Add new type:%n%s", type.toString()));
             TypeEntity newType = typeRepository.saveAndFlush(type);
-            log.debug(String.format("Id for new type: %d", newType.getId()));
+            log.info(String.format("Id for new type: %d", newType.getId()));
             return newType;
         }
     }
@@ -69,13 +69,13 @@ public class TypeServiceImpl implements TypeService {
     @Override
     public TypeEntity updateType(TypeEntity type) {
         TypeEntity updatedType = typeRepository.saveAndFlush(type);
-        log.debug(String.format("Updated type:%n%s", updatedType.toString()));
+        log.info(String.format("Updated type:%n%s", updatedType.toString()));
         return updatedType;
     }
 
     @Override
     public void deleteType(TypeEntity type) {
-        log.debug(String.format("Deleted type:%n%s", type.toString()));
+        log.info(String.format("Deleted type:%n%s", type.toString()));
         typeRepository.delete(type);
     }
 }

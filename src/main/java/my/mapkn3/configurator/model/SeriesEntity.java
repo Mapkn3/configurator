@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "series")
+@Table(name = "series_table")
 public class SeriesEntity {
     @Id
     @Column(name = "id", unique = true, nullable = false)

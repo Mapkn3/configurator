@@ -24,9 +24,9 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public List<CurrencyEntity> getAllCurrencies() {
         List<CurrencyEntity> currencies = currencyRepository.findAll();
-        log.debug(String.format("Get %d currencies:%n", currencies.size()));
+        log.info(String.format("Get %d currencies:%n", currencies.size()));
         for (CurrencyEntity currency : currencies) {
-            log.debug(String.format("%s%n", currency.toString()));
+            log.info(String.format("%s%n", currency.toString()));
         }
         return currencies;
     }
@@ -34,10 +34,10 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional(readOnly = true)
     public CurrencyEntity getCurrencyById(long id) {
-        log.debug(String.format("Getting currency with id = %d", id));
+        log.info(String.format("Getting currency with id = %d", id));
         CurrencyEntity currency = currencyRepository.findById(id).orElse(null);
         if (currency == null) {
-            log.debug(String.format("Currency with id = %d not found", id));
+            log.info(String.format("Currency with id = %d not found", id));
         }
         return currency;
     }
@@ -45,10 +45,10 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional(readOnly = true)
     public CurrencyEntity getCurrencyByName(String name) {
-        log.debug(String.format("Getting currency with name = %s", name));
+        log.info(String.format("Getting currency with name = %s", name));
         CurrencyEntity currency = currencyRepository.findByName(name).orElse(null);
         if (currency == null) {
-            log.debug(String.format("Currency with name = %s not found", name));
+            log.info(String.format("Currency with name = %s not found", name));
         }
         return currency;
     }
@@ -57,12 +57,12 @@ public class CurrencyServiceImpl implements CurrencyService {
     public CurrencyEntity addCurrency(CurrencyEntity currency) {
         CurrencyEntity entity = currencyRepository.findByName(currency.getName()).orElse(null);
         if (entity != null) {
-            log.debug(String.format("Currency already exist:%n%s", entity.toString()));
+            log.info(String.format("Currency already exist:%n%s", entity.toString()));
             return null;
         } else {
-            log.debug(String.format("Add new currency:%n%s", currency.toString()));
+            log.info(String.format("Add new currency:%n%s", currency.toString()));
             CurrencyEntity newCurrency = currencyRepository.saveAndFlush(currency);
-            log.debug(String.format("Id for new currency: %d", newCurrency.getId()));
+            log.info(String.format("Id for new currency: %d", newCurrency.getId()));
             return newCurrency;
         }
     }
@@ -70,13 +70,13 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public CurrencyEntity updateCurrency(CurrencyEntity currency) {
         CurrencyEntity updatedCurrency = currencyRepository.saveAndFlush(currency);
-        log.debug(String.format("Updated currency:%n%s", updatedCurrency.toString()));
+        log.info(String.format("Updated currency:%n%s", updatedCurrency.toString()));
         return updatedCurrency;
     }
 
     @Override
     public void deleteCurrency(CurrencyEntity currency) {
-        log.debug(String.format("Deleted currency:%n%s", currency.toString()));
+        log.info(String.format("Deleted currency:%n%s", currency.toString()));
         currencyRepository.delete(currency);
     }
 }
