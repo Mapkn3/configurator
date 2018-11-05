@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -21,11 +22,20 @@ public class FactoryServiceImpl implements FactoryService {
     }
 
     @Override
+    public FactoryEntity getDefaultFactory() {
+        FactoryEntity defaultFactory = new FactoryEntity();
+        defaultFactory.setId(-1);
+        defaultFactory.setName("-");
+        defaultFactory.setSeries(Collections.emptyList());
+        return defaultFactory;
+    }
+
+    @Override
     public List<FactoryEntity> getAllFactories() {
         List<FactoryEntity> factories = factoryRepository.findAll();
-        log.info(String.format("Get %d factories:%n", factories.size()));
+        log.info(String.format("Get %d factories:", factories.size()));
         for (FactoryEntity factory : factories) {
-            log.info(String.format("%s%n", factory.toString()));
+            log.info(String.format("%s", factory.toString()));
         }
         return factories;
     }
@@ -34,8 +44,8 @@ public class FactoryServiceImpl implements FactoryService {
     @Transactional(readOnly = true)
     public FactoryEntity getFactoryById(long id) {
         log.info(String.format("Getting factory with id = %d", id));
-        FactoryEntity factory = factoryRepository.findById(id).orElse(null);
-        if (factory == null) {
+        FactoryEntity factory = factoryRepository.findById(id).orElse(getDefaultFactory());
+        if (factory.equals(getDefaultFactory())) {
             log.info(String.format("Factory with id = %d not found", id));
         }
         return factory;
@@ -45,8 +55,8 @@ public class FactoryServiceImpl implements FactoryService {
     @Transactional(readOnly = true)
     public FactoryEntity getFactoryByName(String name) {
         log.info(String.format("Getting factory with name = %s", name));
-        FactoryEntity factory = factoryRepository.findByName(name).orElse(null);
-        if (factory == null) {
+        FactoryEntity factory = factoryRepository.findByName(name).orElse(getDefaultFactory());
+        if (factory.equals(getDefaultFactory())) {
             log.info(String.format("Factory with name = %s not found", name));
         }
         return factory;
@@ -57,7 +67,7 @@ public class FactoryServiceImpl implements FactoryService {
         FactoryEntity entity = factoryRepository.findByName(factory.getName()).orElse(null);
         if (entity != null) {
             log.info(String.format("Factory already exist:%n%s", entity.toString()));
-            return null;
+            return entity;
         } else {
             log.info(String.format("Add new factory:%n%s", factory.toString()));
             FactoryEntity newFactory = factoryRepository.saveAndFlush(factory);

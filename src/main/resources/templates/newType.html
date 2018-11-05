@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый тип</title>
+</head>
+<body>
+<div>
+    <form action="#" th:action="@{/new/type}" th:object="${type}" method="post">
+        <input type="hidden" value="0" th:field="*{id}"/>
+        <label for="typeName">Название:</label>
+        <input type="text" id="typeName" th:field="*{name}"/>
+        <button type="submit">Создать новый тип</button>
+    </form>
+</div>
+</body>
+</html>

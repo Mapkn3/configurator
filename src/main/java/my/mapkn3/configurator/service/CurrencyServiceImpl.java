@@ -22,11 +22,19 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
+    public CurrencyEntity getDefaultCurrency() {
+        CurrencyEntity defaultCurrency = new CurrencyEntity();
+        defaultCurrency.setId(-1);
+        defaultCurrency.setName("-");
+        return defaultCurrency;
+    }
+
+    @Override
     public List<CurrencyEntity> getAllCurrencies() {
         List<CurrencyEntity> currencies = currencyRepository.findAll();
-        log.info(String.format("Get %d currencies:%n", currencies.size()));
+        log.info(String.format("Get %d currencies:", currencies.size()));
         for (CurrencyEntity currency : currencies) {
-            log.info(String.format("%s%n", currency.toString()));
+            log.info(String.format("%s", currency.toString()));
         }
         return currencies;
     }
@@ -35,8 +43,8 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional(readOnly = true)
     public CurrencyEntity getCurrencyById(long id) {
         log.info(String.format("Getting currency with id = %d", id));
-        CurrencyEntity currency = currencyRepository.findById(id).orElse(null);
-        if (currency == null) {
+        CurrencyEntity currency = currencyRepository.findById(id).orElse(getDefaultCurrency());
+        if (currency.equals(getDefaultCurrency())) {
             log.info(String.format("Currency with id = %d not found", id));
         }
         return currency;
@@ -46,8 +54,8 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional(readOnly = true)
     public CurrencyEntity getCurrencyByName(String name) {
         log.info(String.format("Getting currency with name = %s", name));
-        CurrencyEntity currency = currencyRepository.findByName(name).orElse(null);
-        if (currency == null) {
+        CurrencyEntity currency = currencyRepository.findByName(name).orElse(getDefaultCurrency());
+        if (currency.equals(getDefaultCurrency())) {
             log.info(String.format("Currency with name = %s not found", name));
         }
         return currency;
@@ -58,7 +66,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         CurrencyEntity entity = currencyRepository.findByName(currency.getName()).orElse(null);
         if (entity != null) {
             log.info(String.format("Currency already exist:%n%s", entity.toString()));
-            return null;
+            return entity;
         } else {
             log.info(String.format("Add new currency:%n%s", currency.toString()));
             CurrencyEntity newCurrency = currencyRepository.saveAndFlush(currency);

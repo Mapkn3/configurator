@@ -5,6 +5,8 @@ import my.mapkn3.configurator.model.FactoryEntity;
 import java.util.List;
 
 public interface FactoryService {
+    FactoryEntity getDefaultFactory();
+
     List<FactoryEntity> getAllFactories();
 
     FactoryEntity getFactoryById(long id);

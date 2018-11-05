@@ -5,6 +5,8 @@ import my.mapkn3.configurator.model.CurrencyEntity;
 import java.util.List;
 
 public interface CurrencyService {
+    CurrencyEntity getDefaultCurrency();
+
     List<CurrencyEntity> getAllCurrencies();
 
     CurrencyEntity getCurrencyById(long id);

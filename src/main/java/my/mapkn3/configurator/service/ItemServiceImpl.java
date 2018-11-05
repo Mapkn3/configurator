@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -21,11 +23,68 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public ItemEntity getDefaultItem() {
+        ItemEntity defaultItem = new ItemEntity();
+        defaultItem.setId(-1);
+        defaultItem.setModel("-");
+        defaultItem.setOurArticle("");
+        defaultItem.setFactoryArticle("");
+        defaultItem.setCost(BigDecimal.ZERO);
+        defaultItem.setEup(BigDecimal.ZERO);
+        defaultItem.setDdp0(BigDecimal.ZERO);
+        defaultItem.setDdp1(BigDecimal.ZERO);
+        defaultItem.setDdp2(BigDecimal.ZERO);
+        defaultItem.setDdp3(BigDecimal.ZERO);
+        defaultItem.setDdp4(BigDecimal.ZERO);
+        defaultItem.setDdp1min(BigDecimal.ZERO);
+        defaultItem.setExw(BigDecimal.ZERO);
+        defaultItem.setBalance(0);
+        defaultItem.setDescription("");
+        defaultItem.setPathToPhoto("");
+        defaultItem.setComment("");
+
+        CurrencyEntity defaultCurrency = new CurrencyEntity();
+        defaultCurrency.setId(-1);
+        defaultCurrency.setName("-");
+
+        TypeEntity defaultType = new TypeEntity();
+        defaultType.setId(-1);
+        defaultType.setName("-");
+
+        GroupEntity defaultGroup = new GroupEntity();
+        defaultGroup.setId(-1);
+        defaultGroup.setName("-");
+
+        SeriesEntity defaultSeries = new SeriesEntity();
+        defaultSeries.setId(-1);
+        defaultSeries.setName("-");
+        defaultSeries.setDescription("");
+        defaultSeries.setArticle("");
+
+        FactoryEntity defaultFactory = new FactoryEntity();
+        defaultFactory.setId(-1);
+        defaultFactory.setName("-");
+        defaultFactory.setSeries(Collections.singletonList(defaultSeries));
+
+        defaultSeries.setFactory(defaultFactory);
+
+        defaultGroup.setSeries(defaultSeries);
+
+        defaultItem.setCurrency(defaultCurrency);
+        defaultItem.setType(defaultType);
+        defaultItem.setSeries(defaultSeries);
+        defaultItem.setGroup(defaultGroup);
+        defaultItem.setFactory(defaultFactory);
+
+        return defaultItem;
+    }
+
+    @Override
     public List<ItemEntity> getAllItems() {
         List<ItemEntity> items = itemRepository.findAll();
-        log.info(String.format("Get %d items:%n", items.size()));
+        log.info(String.format("Get %d items:", items.size()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -33,9 +92,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getAllByType(TypeEntity type) {
         List<ItemEntity> items = itemRepository.findAllByType(type);
-        log.info(String.format("Get %d items for type:%n%s%n", items.size(), type.toString()));
+        log.info(String.format("Get %d items for type:%n%s", items.size(), type.toString()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -43,9 +102,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getAllByFactory(FactoryEntity factory) {
         List<ItemEntity> items = itemRepository.findAllByFactory(factory);
-        log.info(String.format("Get %d items for factory:%n%s%n", items.size(), factory.toString()));
+        log.info(String.format("Get %d items for factory:%n%s", items.size(), factory.toString()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -53,9 +112,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getAllBySeries(SeriesEntity series) {
         List<ItemEntity> items = itemRepository.findAllBySeries(series);
-        log.info(String.format("Get %d items for series:%n%s%n", items.size(), series.toString()));
+        log.info(String.format("Get %d items for series:%n%s", items.size(), series.toString()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -63,9 +122,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getAllByGroup(GroupEntity group) {
         List<ItemEntity> items = itemRepository.findAllByGroup(group);
-        log.info(String.format("Get %d items for group:%n%s%n", items.size(), group.toString()));
+        log.info(String.format("Get %d items for group:%n%s", items.size(), group.toString()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -73,10 +132,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getAllByFactoryAndSeriesAndGroup(FactoryEntity factory, SeriesEntity series, GroupEntity group) {
         List<ItemEntity> items = itemRepository.findAllByFactoryAndSeriesAndGroup(factory, series, group);
-        log.info(String.format("Get %d items for factory, series and group:%n%s%n%s%n%s%n", items.size(),
+        log.info(String.format("Get %d items for factory, series and group:%n%s%n%s%n%s", items.size(),
                 factory.toString(), series.toString(), group.toString()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -84,9 +143,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getAllByFactoryAndSeries(FactoryEntity factory, SeriesEntity series) {
         List<ItemEntity> items = itemRepository.findAllByFactoryAndSeries(factory, series);
-        log.info(String.format("Get %d items for factory and series:%n%s%n%s%n", items.size(), factory.toString(), series.toString()));
+        log.info(String.format("Get %d items for factory and series:%n%s%n%s", items.size(), factory.toString(), series.toString()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -94,9 +153,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getAllByFactoryAndGroup(FactoryEntity factory, GroupEntity group) {
         List<ItemEntity> items = itemRepository.findAllByFactoryAndGroup(factory, group);
-        log.info(String.format("Get %d items for factory and group:%n%s%n%s%n", items.size(), factory.toString(), group.toString()));
+        log.info(String.format("Get %d items for factory and group:%n%s%n%s", items.size(), factory.toString(), group.toString()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -104,9 +163,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getAllBySeriesAndGroup(SeriesEntity series, GroupEntity group) {
         List<ItemEntity> items = itemRepository.findAllBySeriesAndGroup(series, group);
-        log.info(String.format("Get %d items for series and group:%n%s%n%s%n", items.size(), series.toString(), group.toString()));
+        log.info(String.format("Get %d items for series and group:%n%s%n%s", items.size(), series.toString(), group.toString()));
         for (ItemEntity item : items) {
-            log.info(String.format("%s%n", item.toString()));
+            log.info(String.format("%s", item.toString()));
         }
         return items;
     }
@@ -114,8 +173,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemEntity getById(long id) {
         log.info(String.format("Getting item with id = %d", id));
-        ItemEntity item = itemRepository.findById(id).orElse(null);
-        if (item == null) {
+        ItemEntity item = itemRepository.findById(id).orElse(getDefaultItem());
+        if (item.equals(getDefaultItem())) {
             log.info(String.format("Item with id = %d not found", id));
         }
         return item;
@@ -124,8 +183,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemEntity getByModel(String model) {
         log.info(String.format("Getting item with model = %s", model));
-        ItemEntity item = itemRepository.findByModel(model).orElse(null);
-        if (item == null) {
+        ItemEntity item = itemRepository.findByModel(model).orElse(getDefaultItem());
+        if (item.equals(getDefaultItem())) {
             log.info(String.format("Item with model = %s not found", model));
         }
         return item;
@@ -134,8 +193,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemEntity getByOurArticle(String ourArticle) {
         log.info(String.format("Getting item with our article = %s", ourArticle));
-        ItemEntity item = itemRepository.findByOurArticle(ourArticle).orElse(null);
-        if (item == null) {
+        ItemEntity item = itemRepository.findByOurArticle(ourArticle).orElse(getDefaultItem());
+        if (item.equals(getDefaultItem())) {
             log.info(String.format("Item with our article = %s not found", ourArticle));
         }
         return item;
@@ -144,8 +203,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemEntity getByFactoryArticle(String factoryArticle) {
         log.info(String.format("Getting item with factory article = %s", factoryArticle));
-        ItemEntity item = itemRepository.findByFactoryArticle(factoryArticle).orElse(null);
-        if (item == null) {
+        ItemEntity item = itemRepository.findByFactoryArticle(factoryArticle).orElse(getDefaultItem());
+        if (item.equals(getDefaultItem())) {
             log.info(String.format("Item with factory article = %s not found", factoryArticle));
         }
         return item;
@@ -156,7 +215,7 @@ public class ItemServiceImpl implements ItemService {
         ItemEntity entity = itemRepository.findByModel(item.getModel()).orElse(null);
         if (entity != null) {
             log.info(String.format("Item already exist:%n%s", entity.toString()));
-            return null;
+            return entity;
         } else {
             log.info(String.format("Add new item:%n%s", item.toString()));
             ItemEntity newItem = itemRepository.saveAndFlush(item);

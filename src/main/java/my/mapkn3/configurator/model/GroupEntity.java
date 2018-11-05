@@ -16,6 +16,6 @@ public class GroupEntity {
     @Column(name = "name", unique = true)
     private String name;
     @ManyToOne
-    @JoinColumn(name = "factory_id", referencedColumnName = "id", nullable = false)
-    private FactoryEntity factory;
+    @JoinColumn(name = "series_id", referencedColumnName = "id", nullable = false)
+    private SeriesEntity series;
 }

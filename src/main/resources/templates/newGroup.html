@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Новая группа</title>
+</head>
+<body>
+<div>
+    <form action="#" th:action="@{/new/group}" th:object="${group}" method="post">
+        <input type="hidden" value="0" th:field="*{id}"/>
+        <label for="groupName">Название:</label>
+        <input type="text" id="groupName" th:field="*{name}">
+        <label for="series">Серия:</label>
+        <select id="series" th:field="*{series}">
+            <option th:each="series:${allSeries}" th:text="|${series.factory.name} ${series.name}|" th:value="${series.id}">Завод</option>
+        </select>
+        <button type="submit">Создать новую группу</button>
+    </form>
+</div>
+</body>
+</html>

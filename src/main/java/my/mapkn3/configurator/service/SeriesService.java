@@ -6,6 +6,8 @@ import my.mapkn3.configurator.model.SeriesEntity;
 import java.util.List;
 
 public interface SeriesService {
+    SeriesEntity getDefaultSeries();
+
     List<SeriesEntity> getAllSeries();
 
     List<SeriesEntity> getAllSeriesByFactory(FactoryEntity factory);

@@ -5,6 +5,8 @@ import my.mapkn3.configurator.model.TypeEntity;
 import java.util.List;
 
 public interface TypeService {
+    TypeEntity getDefaultType();
+
     List<TypeEntity> getAllTypes();
 
     TypeEntity getTypeById(long id);

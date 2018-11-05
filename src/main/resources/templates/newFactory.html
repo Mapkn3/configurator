@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый завод</title>
+</head>
+<body>
+<div>
+    <form action="#" th:action="@{/new/factory}" th:object="${factory}" method="post">
+        <input type="hidden" value="0" th:field="*{id}"/>
+        <label for="factoryName">Название:</label>
+        <input type="text" id="factoryName" th:field="*{name}"/>
+        <button type="submit">Создать новый завод</button>
+    </form>
+</div>
+</body>
+</html>

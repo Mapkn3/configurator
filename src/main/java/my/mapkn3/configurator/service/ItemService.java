@@ -5,6 +5,8 @@ import my.mapkn3.configurator.model.*;
 import java.util.List;
 
 public interface ItemService {
+    ItemEntity getDefaultItem();
+
     List<ItemEntity> getAllItems();
 
     List<ItemEntity> getAllByType(TypeEntity type);

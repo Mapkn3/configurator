@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый товар</title>
+</head>
+<body>
+<div>
+    <form action="#" th:action="@{/new/item}" th:object="${item}" method="post">
+        <input type="hidden" value="0" th:field="*{id}"/>
+        <label for="itemModel">Модель:</label>
+        <input type="text" id="itemModel" th:field="*{model}">
+        <label for="itemOurArticle">Внутренний артикул:</label>
+        <input type="text" id="itemOurArticle" th:field="*{ourArticle}">
+        <label for="itemFactoryArticle">Артикул завода:</label>
+        <input type="text" id="itemFactoryArticle" th:field="*{factoryArticle}">
+        <label for="currency">Валюта:</label>
+        <select id="currency" th:field="*{currency}">
+            <option th:each="currecny:${allCurrencies}" th:text="${currecny.name}" th:value="${currecny.id}">Валюта</option>
+        </select>
+        <label for="itemCost">Цена:</label>
+        <input type="text" id="itemCost" th:field="*{cost}">
+        <label for="itemEup">EUP:</label>
+        <input type="text" id="itemEup" th:field="*{eup}">
+        <label for="itemDdp0">DDP0:</label>
+        <input type="text" id="itemDdp0" th:field="*{ddp0}">
+        <label for="itemDdp1">DDP1:</label>
+        <input type="text" id="itemDdp1" th:field="*{ddp1}">
+        <label for="itemDdp2">DDP2:</label>
+        <input type="text" id="itemDdp2" th:field="*{ddp2}">
+        <label for="itemDdp3">DDP3:</label>
+        <input type="text" id="itemDdp3" th:field="*{ddp3}">
+        <label for="itemDdp4">DDP4:</label>
+        <input type="text" id="itemDdp4" th:field="*{ddp4}">
+        <label for="itemDdp1min">DDP1min:</label>
+        <input type="text" id="itemDdp1min" th:field="*{ddp1min}">
+        <label for="itemExw">EXW:</label>
+        <input type="text" id="itemExw" th:field="*{exw}">
+        <label for="itemBalance">Остаток:</label>
+        <input type="number" id="itemBalance" th:field="*{balance}">
+        <label for="itemDescription">Описание:</label>
+        <input type="text" id="itemDescription" th:field="*{description}">
+        <label for="itemPathToPhoto">Путь к фото:</label>
+        <input type="text" id="itemPathToPhoto" th:field="*{pathToPhoto}">
+        <label for="itemComment">Комментарий:</label>
+        <input type="text" id="itemComment" th:field="*{comment}">
+        <label for="types">Тип:</label>
+        <select id="types" th:field="*{type}">
+            <option th:each="type:${allTypes}" th:text="${type.name}" th:value="${type.id}">Тип</option>
+        </select>
+        <label for="factories">Группа:</label>
+        <select id="factories" th:field="*{group}">
+            <option th:each="group:${allGroups}" th:text="|${group.series.factory.name} ${group.series.name} ${group.name}|" th:value="${group.id}">Группа</option>
+        </select>
+        <button type="submit">Добавить новый товар</button>
+    </form>
+</div>
+</body>
+</html>

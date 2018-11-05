@@ -21,11 +21,19 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
+    public TypeEntity getDefaultType() {
+        TypeEntity defaultType = new TypeEntity();
+        defaultType.setId(-1);
+        defaultType.setName("-");
+        return defaultType;
+    }
+
+    @Override
     public List<TypeEntity> getAllTypes() {
         List<TypeEntity> types = typeRepository.findAll();
-        log.info(String.format("Get %d types:%n", types.size()));
+        log.info(String.format("Get %d types:", types.size()));
         for (TypeEntity type : types) {
-            log.info(String.format("%s%n", type.toString()));
+            log.info(String.format("%s", type.toString()));
         }
         return types;
     }
@@ -34,8 +42,8 @@ public class TypeServiceImpl implements TypeService {
     @Transactional(readOnly = true)
     public TypeEntity getTypeById(long id) {
         log.info(String.format("Getting type with id = %d", id));
-        TypeEntity type = typeRepository.findById(id).orElse(null);
-        if (type == null) {
+        TypeEntity type = typeRepository.findById(id).orElse(getDefaultType());
+        if (type.equals(getDefaultType())) {
             log.info(String.format("Type with id = %d not found", id));
         }
         return type;
@@ -45,8 +53,8 @@ public class TypeServiceImpl implements TypeService {
     @Transactional(readOnly = true)
     public TypeEntity getTypeByName(String name) {
         log.info(String.format("Getting type with name = %s", name));
-        TypeEntity type = typeRepository.findByName(name).orElse(null);
-        if (type == null) {
+        TypeEntity type = typeRepository.findByName(name).orElse(getDefaultType());
+        if (type.equals(getDefaultType())) {
             log.info(String.format("Type with name = %s not found", name));
         }
         return type;
@@ -57,7 +65,7 @@ public class TypeServiceImpl implements TypeService {
         TypeEntity entity = typeRepository.findByName(type.getName()).orElse(null);
         if (entity != null) {
             log.info(String.format("Type already exist:%n%s", entity.toString()));
-            return null;
+            return entity;
         } else {
             log.info(String.format("Add new type:%n%s", type.toString()));
             TypeEntity newType = typeRepository.saveAndFlush(type);

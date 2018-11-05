@@ -1,11 +1,13 @@
 package my.mapkn3.configurator.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Data
+@ToString(exclude = {"series"})
 @Entity
 @Table(name = "factory_table")
 public class FactoryEntity {
@@ -18,6 +20,4 @@ public class FactoryEntity {
     private String name;
     @OneToMany(mappedBy = "factory")
     private Collection<SeriesEntity> series;
-    @OneToMany(mappedBy = "factory")
-    private Collection<GroupEntity> groups;
 }

@@ -3,13 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Конфигуратор</title>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/jquery.dependent-selects.js}"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('.filter').dependentSelects({
+                labels: ['Серия: ', 'Группа: ']
+            });
+        })
+    </script>
 </head>
 <body>
 <div>
-    <label for="currencies">Валюты</label>
-    <select id="currencies">
-        <option th:each="currency:${allCurrencies}" th:text="${currency.name}" th:value="${currency}"></option>
-    </select>
+    <a href="newEntity.html" th:href="@{/new}">Создать</a>
+    <form th:action="@{/}" method="post">
+        <label for="currencies">Валюты</label>
+        <select id="currencies">
+            <option value="-1">-</option>
+            <option th:each="currency:${allCurrencies}" th:text="${currency.name}" th:value="${currency.id}">Валюта</option>
+        </select>
+        <label for="types">Типы</label>
+        <select id="types">
+            <option value="-1">-</option>
+            <option th:each="type:${allTypes}" th:text="${type.name}" th:value="${type.id}">Тип</option>
+        </select>
+        <label for="filter">Завод: </label>
+        <select class="filter" id="filter">
+            <option th:text="${'Все заводы > Все серии > Все группы'}" th:value="${'-1|-1|-1'}">фильтр</option>
+            <option th:value="${''}"></option>
+            <option th:each="factory:${allFactories}" th:text="${factory.name}+' > Все серии > Все группы'" th:value="${factory.id}+'|-1|-1'">фильтр</option>
+            <option th:each="series:${allSeries}" th:text="'Все заводы > '+${series.name}+' > Все группы'" th:value="'-1|'+${series.id}+'|-1'">фильтр</option>
+            <option th:each="group:${allGroups}" th:text="'Все заводы > Все серии > '+${group.name}" th:value="'-1|-1|'+${group.id}">фильтр</option>
+            <option th:each="series:${allSeries}" th:text="${series.factory.name}+' > '+${series.name}+' > Все группы'" th:value="${series.factory.id}+'|'+${series.id}+'|-1'">фильтр</option>
+            <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > Все серии > '+${group.name}" th:value="${group.series.factory.id}+'|-1|'+${group.id}">фильтр</option>
+            <option th:each="group:${allGroups}" th:text="'Все заводы > '+${group.series.name}+' > '+${group.name}" th:value="'-1|'+${group.series.id}+'|'+${group.id}">фильтр</option>
+            <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > '+${group.series.name}+' > '+${group.name}" th:value="${group.series.factory.id}+'|'+${group.series.id}+'|'+${group.id}">фильтр</option>
+        </select>
+        <button type="submit">Отправить</button>
+        <label for="all">Солянка</label>
+        <select id="all">
+            <option th:each="factory:${allFactories}" th:text="${factory.name}" th:value="${factory.id}">Завод</option>
+            <optgroup th:each="factory:${allFactories}" th:label="${factory.name}">
+                <option th:each="series:${factory.series}" th:text="${series.name}" th:value="${series.id}">Серия</option>
+            </optgroup>
+            <optgroup th:each="series:${allSeries}" th:label="${series.factory.name}+' > '+${series.name}">
+                <option th:each="group:${series.groups}" th:text="${group.name}" th:value="${group.id}">Группа</option>
+            </optgroup>
+        </select>
+    </form>
 </div>
 </body>
 </html>

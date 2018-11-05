@@ -13,6 +13,6 @@ public class TypeEntity {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
     @Basic
-    @Column(name = "name", unique = true)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 }
