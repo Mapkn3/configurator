@@ -18,6 +18,9 @@ public class FactoryEntity {
     @Basic
     @Column(name = "name", unique = true, nullable = false)
     private String name;
+    @ManyToOne
+    @JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false)
+    private TypeEntity type;
     @OneToMany(mappedBy = "factory")
     private Collection<SeriesEntity> series;
 }

@@ -2,6 +2,7 @@ package my.mapkn3.configurator.service;
 
 import lombok.extern.slf4j.Slf4j;
 import my.mapkn3.configurator.model.FactoryEntity;
+import my.mapkn3.configurator.model.TypeEntity;
 import my.mapkn3.configurator.repository.FactoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,13 @@ public class FactoryServiceImpl implements FactoryService {
         defaultFactory.setId(-1);
         defaultFactory.setName("-");
         defaultFactory.setSeries(Collections.emptyList());
+
+        TypeEntity defaultType = new TypeEntity();
+        defaultType.setId(-1);
+        defaultType.setName("-");
+        defaultType.setFactories(Collections.singletonList(defaultFactory));
+
+        defaultFactory.setType(defaultType);
         return defaultFactory;
     }
 
@@ -34,6 +42,16 @@ public class FactoryServiceImpl implements FactoryService {
     public List<FactoryEntity> getAllFactories() {
         List<FactoryEntity> factories = factoryRepository.findAll();
         log.info(String.format("Get %d factories:", factories.size()));
+        for (FactoryEntity factory : factories) {
+            log.info(String.format("%s", factory.toString()));
+        }
+        return factories;
+    }
+
+    @Override
+    public List<FactoryEntity> getAllFactoriesByType(TypeEntity type) {
+        List<FactoryEntity> factories = factoryRepository.findAllByType(type);
+        log.info(String.format("Get %d factories for type:%n%s", factories.size(), type.toString()));
         for (FactoryEntity factory : factories) {
             log.info(String.format("%s", factory.toString()));
         }
@@ -64,9 +82,11 @@ public class FactoryServiceImpl implements FactoryService {
 
     @Override
     public FactoryEntity addFactory(FactoryEntity factory) {
-        FactoryEntity entity = factoryRepository.findByName(factory.getName()).orElse(null);
+        FactoryEntity entity = factory.getType().getFactories().stream().filter((f)->f.getName().equals(factory.getName())).findFirst().orElse(null);
         if (entity != null) {
             log.info(String.format("Factory already exist:%n%s", entity.toString()));
+            factory.setId(entity.getId());
+            updateFactory(factory);
             return entity;
         } else {
             log.info(String.format("Add new factory:%n%s", factory.toString()));

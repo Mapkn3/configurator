@@ -13,7 +13,7 @@ public class GroupEntity {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
     @Basic
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
     @ManyToOne
     @JoinColumn(name = "series_id", referencedColumnName = "id", nullable = false)

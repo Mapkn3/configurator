@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.mapkn3.configurator.model.FactoryEntity;
 import my.mapkn3.configurator.model.GroupEntity;
 import my.mapkn3.configurator.model.SeriesEntity;
+import my.mapkn3.configurator.model.TypeEntity;
 import my.mapkn3.configurator.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,15 @@ public class GroupServiceImpl implements GroupService {
         defaultFactory.setName("-");
         defaultFactory.setSeries(Collections.singletonList(defaultSeries));
 
+        TypeEntity defaultType = new TypeEntity();
+        defaultType.setId(-1);
+        defaultType.setName("-");
+        defaultType.setFactories(Collections.singletonList(defaultFactory));
+
+        defaultFactory.setType(defaultType);
+
         defaultSeries.setFactory(defaultFactory);
+        defaultSeries.setGroups(Collections.singletonList(defaultGroup));
 
         defaultGroup.setSeries(defaultSeries);
         return defaultGroup;
@@ -92,9 +101,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupEntity addGroup(GroupEntity group) {
-        GroupEntity entity = groupRepository.findByName(group.getName()).orElse(null);
+        GroupEntity entity = group.getSeries().getGroups().stream().filter((g)->g.getName().equals(group.getName())).findFirst().orElse(null);
         if (entity != null) {
             log.info(String.format("Group already exist:%n%s", entity.toString()));
+            group.setId(entity.getId());
+            updateGroup(group);
             return entity;
         } else {
             log.info(String.format("Add new group:%n%s", group.toString()));

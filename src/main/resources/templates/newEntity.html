@@ -7,9 +7,12 @@
 <body>
 <div>
     <div>
-        <a href="newType.html" th:href="@{/new/type}">Добавить тип</a>
+        <a href="index.html" th:href="@{/}">На главную</a>
     </div>
     <div>
+        <a href="newType.html" th:href="@{/new/type}">Добавить тип</a>
+    </div>
+    <div th:unless="${#lists.isEmpty(allTypes)}">
         <a href="newFactory.html" th:href="@{/new/factory}">Добавить завод</a>
     </div>
     <div th:unless="${#lists.isEmpty(allFactories)}">

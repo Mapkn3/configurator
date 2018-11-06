@@ -10,6 +10,10 @@
         <input type="hidden" value="0" th:field="*{id}"/>
         <label for="factoryName">Название:</label>
         <input type="text" id="factoryName" th:field="*{name}"/>
+        <label for="type">Тип производимой продукции:</label>
+        <select id="type" th:field="*{type}">
+            <option th:each="type:${allTypes}" th:text="${type.name}" th:value="${type.id}">Тип</option>
+        </select>
         <button type="submit">Создать новый завод</button>
     </form>
 </div>

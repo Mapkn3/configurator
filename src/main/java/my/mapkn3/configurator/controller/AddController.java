@@ -90,6 +90,7 @@ public class AddController extends MainController {
         }
         itemEntity.setSeries(itemEntity.getGroup().getSeries());
         itemEntity.setFactory(itemEntity.getSeries().getFactory());
+        itemEntity.setType(itemEntity.getFactory().getType());
         itemService.addItem(itemEntity);
         model.clear();
         return "redirect:/new";

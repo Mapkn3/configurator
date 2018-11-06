@@ -3,6 +3,7 @@ package my.mapkn3.configurator.service;
 import lombok.extern.slf4j.Slf4j;
 import my.mapkn3.configurator.model.FactoryEntity;
 import my.mapkn3.configurator.model.SeriesEntity;
+import my.mapkn3.configurator.model.TypeEntity;
 import my.mapkn3.configurator.repository.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,13 @@ public class SeriesServiceImpl implements SeriesService {
         defaultFactory.setId(-1);
         defaultFactory.setName("-");
         defaultFactory.setSeries(Collections.singletonList(defaultSeries));
+
+        TypeEntity defaultType = new TypeEntity();
+        defaultType.setId(-1);
+        defaultType.setName("-");
+        defaultType.setFactories(Collections.singletonList(defaultFactory));
+
+        defaultFactory.setType(defaultType);
 
         defaultSeries.setFactory(defaultFactory);
         defaultSeries.setGroups(Collections.emptyList());
@@ -97,9 +105,11 @@ public class SeriesServiceImpl implements SeriesService {
 
     @Override
     public SeriesEntity addSeries(SeriesEntity series) {
-        SeriesEntity entity = seriesRepository.findByName(series.getName()).orElse(null);
+        SeriesEntity entity = series.getFactory().getSeries().stream().filter((s)->s.getName().equals(series.getName())).findFirst().orElse(null);
         if (entity != null) {
             log.info(String.format("Series already exist:%n%s", entity.toString()));
+            series.setId(entity.getId());
+            updateSeries(series);
             return entity;
         } else {
             log.info(String.format("Add new series:%n%s", series.toString()));

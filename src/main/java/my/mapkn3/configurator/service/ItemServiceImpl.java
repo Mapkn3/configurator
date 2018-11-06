@@ -47,10 +47,6 @@ public class ItemServiceImpl implements ItemService {
         defaultCurrency.setId(-1);
         defaultCurrency.setName("-");
 
-        TypeEntity defaultType = new TypeEntity();
-        defaultType.setId(-1);
-        defaultType.setName("-");
-
         GroupEntity defaultGroup = new GroupEntity();
         defaultGroup.setId(-1);
         defaultGroup.setName("-");
@@ -66,15 +62,23 @@ public class ItemServiceImpl implements ItemService {
         defaultFactory.setName("-");
         defaultFactory.setSeries(Collections.singletonList(defaultSeries));
 
+        TypeEntity defaultType = new TypeEntity();
+        defaultType.setId(-1);
+        defaultType.setName("-");
+        defaultType.setFactories(Collections.singletonList(defaultFactory));
+
+        defaultFactory.setType(defaultType);
+
         defaultSeries.setFactory(defaultFactory);
+        defaultSeries.setGroups(Collections.singletonList(defaultGroup));
 
         defaultGroup.setSeries(defaultSeries);
 
         defaultItem.setCurrency(defaultCurrency);
         defaultItem.setType(defaultType);
+        defaultItem.setFactory(defaultFactory);
         defaultItem.setSeries(defaultSeries);
         defaultItem.setGroup(defaultGroup);
-        defaultItem.setFactory(defaultFactory);
 
         return defaultItem;
     }
@@ -215,6 +219,8 @@ public class ItemServiceImpl implements ItemService {
         ItemEntity entity = itemRepository.findByModel(item.getModel()).orElse(null);
         if (entity != null) {
             log.info(String.format("Item already exist:%n%s", entity.toString()));
+            item.setId(entity.getId());
+            updateItem(item);
             return entity;
         } else {
             log.info(String.format("Add new item:%n%s", item.toString()));
