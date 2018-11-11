@@ -23,9 +23,8 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public TypeEntity getDefaultType() {
-        TypeEntity defaultType = new TypeEntity();
+        TypeEntity defaultType = new TypeEntity("-");
         defaultType.setId(-1);
-        defaultType.setName("-");
         defaultType.setFactories(Collections.emptyList());
         return defaultType;
     }

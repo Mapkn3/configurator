@@ -23,7 +23,7 @@
             <option th:each="currency:${allCurrencies}" th:text="${currency.name}" th:value="${currency.id}">Валюта</option>
         </select>
         <!--<label for="filter">Завод: </label>
-        <select class="filter" id="filter" th:field="*{fsgConfig}">
+        <select class="filter" id="filter" th:field="*{tfsgConfig}">
             <option th:text="${'Все заводы > Все серии > Все группы'}" th:value="${'-1|-1|-1'}">фильтр</option>
             <option th:value="${''}"></option>
             <option th:each="factory:${allFactories}" th:text="${factory.name}+' > Все серии > Все группы'" th:value="${factory.id}+'|-1|-1'">фильтр</option>
@@ -35,15 +35,19 @@
             <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > '+${group.series.name}+' > '+${group.name}" th:value="${group.series.factory.id}+'|'+${group.series.id}+'|'+${group.id}">фильтр</option>
         </select>-->
         <label for="filter">Солянка</label>
-        <select id="filter" th:field="*{fsgConfig}">
+        <select id="filter" th:field="*{tfsgConfig}">
             <option th:text="${'Все'}" th:value="${'ALL'}">Все</option>
+            <optgroup label="_______________________________ Типы _________________________________"/>
             <option th:each="type:${allTypes}" th:text="${type.name}" th:value="'T:'+${type.id}">Тип</option>
+            <optgroup label="_______________________________ Заводы _______________________________"/>
             <optgroup th:each="type:${allTypes}" th:label="${type.name}">
                 <option th:each="factory:${type.factories}" th:text="${factory.name}" th:value="'F:'+${factory.id}">Завод</option>
             </optgroup>
+            <optgroup label="_______________________________ Серии ________________________________"/>
             <optgroup th:each="factory:${allFactories}" th:label="${factory.type.name}+' > '+${factory.name}">
                 <option th:each="series:${factory.series}" th:text="${series.name}" th:value="'S:'+${series.id}">Серия</option>
             </optgroup>
+            <optgroup label="_______________________________ Группы _______________________________"/>
             <optgroup th:each="series:${allSeries}" th:label="${series.factory.type.name}+' > '+${series.factory.name}+' > '+${series.name}">
                 <option th:each="group:${series.groups}" th:text="${group.name}" th:value="'G:'+${group.id}">Группа</option>
             </optgroup>

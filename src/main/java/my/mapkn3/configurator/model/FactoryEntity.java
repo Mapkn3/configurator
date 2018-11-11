@@ -1,6 +1,7 @@
 package my.mapkn3.configurator.model;
 
 import lombok.Data;
+import lombok.NonNull;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -16,8 +17,10 @@ public class FactoryEntity {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
     @Basic
-    @Column(name = "name", unique = true, nullable = false)
+    @NonNull
+    @Column(name = "name", nullable = false)
     private String name;
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false)
     private TypeEntity type;

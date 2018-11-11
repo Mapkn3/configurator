@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,32 +27,21 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupEntity getDefaultGroup() {
-        GroupEntity defaultGroup = new GroupEntity();
-        defaultGroup.setId(-1);
-        defaultGroup.setName("-");
-
-        SeriesEntity defaultSeries = new SeriesEntity();
-        defaultSeries.setId(-1);
-        defaultSeries.setName("-");
-        defaultSeries.setDescription("");
-        defaultSeries.setArticle("");
-
-        FactoryEntity defaultFactory = new FactoryEntity();
-        defaultFactory.setId(-1);
-        defaultFactory.setName("-");
-        defaultFactory.setSeries(Collections.singletonList(defaultSeries));
-
-        TypeEntity defaultType = new TypeEntity();
+        TypeEntity defaultType = new TypeEntity("-");
         defaultType.setId(-1);
-        defaultType.setName("-");
+
+        FactoryEntity defaultFactory = new FactoryEntity("-", defaultType);
+        defaultFactory.setId(-1);
+
+        SeriesEntity defaultSeries = new SeriesEntity("-", "", "", defaultFactory);
+        defaultSeries.setId(-1);
+
+        GroupEntity defaultGroup = new GroupEntity("-", defaultSeries);
+        defaultGroup.setId(-1);
+
         defaultType.setFactories(Collections.singletonList(defaultFactory));
-
-        defaultFactory.setType(defaultType);
-
-        defaultSeries.setFactory(defaultFactory);
+        defaultFactory.setSeries(Collections.singletonList(defaultSeries));
         defaultSeries.setGroups(Collections.singletonList(defaultGroup));
-
-        defaultGroup.setSeries(defaultSeries);
         return defaultGroup;
     }
 
@@ -101,18 +91,20 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupEntity addGroup(GroupEntity group) {
-        GroupEntity entity = group.getSeries().getGroups().stream().filter((g)->g.getName().equals(group.getName())).findFirst().orElse(null);
-        if (entity != null) {
-            log.info(String.format("Group already exist:%n%s", entity.toString()));
-            group.setId(entity.getId());
-            updateGroup(group);
-            return entity;
-        } else {
-            log.info(String.format("Add new group:%n%s", group.toString()));
-            GroupEntity newGroup = groupRepository.saveAndFlush(group);
-            log.info(String.format("Id for new group: %d", newGroup.getId()));
-            return newGroup;
+        Collection<GroupEntity> groups = group.getSeries().getGroups();
+        if (groups != null) {
+            GroupEntity entity = groups.stream().filter((g) -> g.getName().equals(group.getName())).findFirst().orElse(null);
+            if (entity != null) {
+                log.info(String.format("Group already exist:%n%s", entity.toString()));
+                group.setId(entity.getId());
+                updateGroup(group);
+                return entity;
+            }
         }
+        log.info(String.format("Add new group:%n%s", group.toString()));
+        GroupEntity newGroup = groupRepository.saveAndFlush(group);
+        log.info(String.format("Id for new group: %d", newGroup.getId()));
+        return newGroup;
     }
 
     @Override

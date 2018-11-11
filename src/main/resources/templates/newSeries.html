@@ -16,7 +16,7 @@
         <input type="text" id="seriesArticle" th:field="*{article}">
         <label for="factories">Завод:</label>
         <select id="factories" th:field="*{factory}">
-            <option th:each="factory:${allFactories}" th:text="${factory.name}" th:value="${factory.id}">Завод</option>
+            <option th:each="factory:${allFactories}" th:text="|${factory.type.name}: ${factory.name}|" th:value="${factory.id}">Завод</option>
         </select>
         <button type="submit">Создать новую серию</button>
     </form>

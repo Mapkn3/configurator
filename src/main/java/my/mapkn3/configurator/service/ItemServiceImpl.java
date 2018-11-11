@@ -24,6 +24,26 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemEntity getDefaultItem() {
+        TypeEntity defaultType = new TypeEntity("-");
+        defaultType.setId(-1);
+
+        FactoryEntity defaultFactory = new FactoryEntity("-", defaultType);
+        defaultFactory.setId(-1);
+
+        SeriesEntity defaultSeries = new SeriesEntity("-", "", "", defaultFactory);
+        defaultSeries.setId(-1);
+
+        GroupEntity defaultGroup = new GroupEntity("-", defaultSeries);
+        defaultGroup.setId(-1);
+
+        defaultType.setFactories(Collections.singletonList(defaultFactory));
+        defaultFactory.setSeries(Collections.singletonList(defaultSeries));
+        defaultSeries.setGroups(Collections.singletonList(defaultGroup));
+
+        CurrencyEntity defaultCurrency = new CurrencyEntity();
+        defaultCurrency.setId(-1);
+        defaultCurrency.setName("-");
+
         ItemEntity defaultItem = new ItemEntity();
         defaultItem.setId(-1);
         defaultItem.setModel("-");
@@ -42,38 +62,6 @@ public class ItemServiceImpl implements ItemService {
         defaultItem.setDescription("");
         defaultItem.setPathToPhoto("");
         defaultItem.setComment("");
-
-        CurrencyEntity defaultCurrency = new CurrencyEntity();
-        defaultCurrency.setId(-1);
-        defaultCurrency.setName("-");
-
-        GroupEntity defaultGroup = new GroupEntity();
-        defaultGroup.setId(-1);
-        defaultGroup.setName("-");
-
-        SeriesEntity defaultSeries = new SeriesEntity();
-        defaultSeries.setId(-1);
-        defaultSeries.setName("-");
-        defaultSeries.setDescription("");
-        defaultSeries.setArticle("");
-
-        FactoryEntity defaultFactory = new FactoryEntity();
-        defaultFactory.setId(-1);
-        defaultFactory.setName("-");
-        defaultFactory.setSeries(Collections.singletonList(defaultSeries));
-
-        TypeEntity defaultType = new TypeEntity();
-        defaultType.setId(-1);
-        defaultType.setName("-");
-        defaultType.setFactories(Collections.singletonList(defaultFactory));
-
-        defaultFactory.setType(defaultType);
-
-        defaultSeries.setFactory(defaultFactory);
-        defaultSeries.setGroups(Collections.singletonList(defaultGroup));
-
-        defaultGroup.setSeries(defaultSeries);
-
         defaultItem.setCurrency(defaultCurrency);
         defaultItem.setType(defaultType);
         defaultItem.setFactory(defaultFactory);

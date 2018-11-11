@@ -46,7 +46,7 @@
         <input type="text" id="itemComment" th:field="*{comment}">
         <label for="factories">Группа:</label>
         <select id="factories" th:field="*{group}">
-            <option th:each="group:${allGroups}" th:text="|${group.series.factory.type.name} ${group.series.factory.name} ${group.series.name} ${group.name}|" th:value="${group.id}">Группа</option>
+            <option th:each="group:${allGroups}" th:text="|(${group.series.factory.type.name}) ${group.series.factory.name} #{-} ${group.series.name}: ${group.name}|" th:value="${group.id}">Группа</option>
         </select>
         <button type="submit">Добавить новый товар</button>
     </form>

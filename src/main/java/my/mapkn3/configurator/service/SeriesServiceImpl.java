@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,25 +26,17 @@ public class SeriesServiceImpl implements SeriesService {
 
     @Override
     public SeriesEntity getDefaultSeries() {
-        SeriesEntity defaultSeries = new SeriesEntity();
-        defaultSeries.setId(-1);
-        defaultSeries.setName("-");
-        defaultSeries.setDescription("");
-        defaultSeries.setArticle("");
-
-        FactoryEntity defaultFactory = new FactoryEntity();
-        defaultFactory.setId(-1);
-        defaultFactory.setName("-");
-        defaultFactory.setSeries(Collections.singletonList(defaultSeries));
-
-        TypeEntity defaultType = new TypeEntity();
+        TypeEntity defaultType = new TypeEntity("-");
         defaultType.setId(-1);
-        defaultType.setName("-");
+
+        FactoryEntity defaultFactory = new FactoryEntity("-", defaultType);
+        defaultFactory.setId(-1);
+
+        SeriesEntity defaultSeries = new SeriesEntity("-", "", "", defaultFactory);
+        defaultSeries.setId(-1);
+
         defaultType.setFactories(Collections.singletonList(defaultFactory));
-
-        defaultFactory.setType(defaultType);
-
-        defaultSeries.setFactory(defaultFactory);
+        defaultFactory.setSeries(Collections.singletonList(defaultSeries));
         defaultSeries.setGroups(Collections.emptyList());
         return defaultSeries;
     }
@@ -105,18 +98,20 @@ public class SeriesServiceImpl implements SeriesService {
 
     @Override
     public SeriesEntity addSeries(SeriesEntity series) {
-        SeriesEntity entity = series.getFactory().getSeries().stream().filter((s)->s.getName().equals(series.getName())).findFirst().orElse(null);
-        if (entity != null) {
-            log.info(String.format("Series already exist:%n%s", entity.toString()));
-            series.setId(entity.getId());
-            updateSeries(series);
-            return entity;
-        } else {
-            log.info(String.format("Add new series:%n%s", series.toString()));
-            SeriesEntity newSeries = seriesRepository.saveAndFlush(series);
-            log.info(String.format("Id for new series: %d", newSeries.getId()));
-            return newSeries;
+        Collection<SeriesEntity> seriesEntities = series.getFactory().getSeries();
+        if (seriesEntities != null) {
+            SeriesEntity entity = seriesEntities.stream().filter((s) -> s.getName().equals(series.getName())).findFirst().orElse(null);
+            if (entity != null) {
+                log.info(String.format("Series already exist:%n%s", entity.toString()));
+                series.setId(entity.getId());
+                updateSeries(series);
+                return entity;
+            }
         }
+        log.info(String.format("Add new series:%n%s", series.toString()));
+        SeriesEntity newSeries = seriesRepository.saveAndFlush(series);
+        log.info(String.format("Id for new series: %d", newSeries.getId()));
+        return newSeries;
     }
 
     @Override

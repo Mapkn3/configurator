@@ -1,6 +1,8 @@
 package my.mapkn3.configurator.controller;
 
+import my.mapkn3.configurator.CurrencyRates.CurrencyRatesService;
 import my.mapkn3.configurator.model.ItemEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +13,20 @@ import java.util.List;
 
 @Controller
 public class IndexController extends MainController {
+
+    @Autowired
+    CurrencyRatesService currencyRatesService;
+
+    @RequestMapping(value = "/currencyRate", method = RequestMethod.GET)
+    public String currencyRate() {
+        System.out.println(currencyRatesService.getUSD());
+        System.out.println(currencyRatesService.getEUR());
+        return "redirect:/";
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showAll(ModelMap model) {
+        currencyRatesService.updateCurrencyRates();
         model.addAttribute("filter", new FilterConfig());
         model.addAttribute("items", itemService.getAllItems());
         return "index";
@@ -44,27 +58,18 @@ public class IndexController extends MainController {
     }
 
     public static class FilterConfig {
-        private long typeId;
-        private String fsgConfig;//factory > series > group
+        private String tfsgConfig;//type > factory > series > group
 
-        public long getTypeId() {
-            return typeId;
+        public String getTfsgConfig() {
+            return tfsgConfig;
         }
 
-        public void setTypeId(long typeId) {
-            this.typeId = typeId;
-        }
-
-        public String getFsgConfig() {
-            return fsgConfig;
-        }
-
-        public void setFsgConfig(String fsgConfig) {
-            this.fsgConfig = fsgConfig;
+        public void setTfsgConfig(String tfsgConfig) {
+            this.tfsgConfig = tfsgConfig;
         }
 
         public Filter getCurrentFilter() {
-            String[] params = fsgConfig.split(":");
+            String[] params = tfsgConfig.split(":");
             switch (params[0]) {
                 case "T":
                     return Filter.TYPE;
@@ -80,12 +85,12 @@ public class IndexController extends MainController {
         }
 
         public Long getCurrentId() {
-            String[] params = fsgConfig.split(":");
+            String[] params = tfsgConfig.split(":");
             return Long.valueOf(params[1]);
         }
 
         /*public Filter getFilter() {
-            List<Long> ids = Arrays.stream(fsgConfig.split("\\|")).map(Long::valueOf).collect(Collectors.toList());
+            List<Long> ids = Arrays.stream(tfsgConfig.split("\\|")).map(Long::valueOf).collect(Collectors.toList());
             if (ids.get(0) == -1) {
                 if (ids.get(1) == -1) {
                     if (ids.get(2) == -1) {

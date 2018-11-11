@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,17 +25,14 @@ public class FactoryServiceImpl implements FactoryService {
 
     @Override
     public FactoryEntity getDefaultFactory() {
-        FactoryEntity defaultFactory = new FactoryEntity();
+        TypeEntity defaultType = new TypeEntity("-");
+        defaultType.setId(-1);
+
+        FactoryEntity defaultFactory = new FactoryEntity("-", defaultType);
         defaultFactory.setId(-1);
-        defaultFactory.setName("-");
         defaultFactory.setSeries(Collections.emptyList());
 
-        TypeEntity defaultType = new TypeEntity();
-        defaultType.setId(-1);
-        defaultType.setName("-");
         defaultType.setFactories(Collections.singletonList(defaultFactory));
-
-        defaultFactory.setType(defaultType);
         return defaultFactory;
     }
 
@@ -82,18 +80,20 @@ public class FactoryServiceImpl implements FactoryService {
 
     @Override
     public FactoryEntity addFactory(FactoryEntity factory) {
-        FactoryEntity entity = factory.getType().getFactories().stream().filter((f)->f.getName().equals(factory.getName())).findFirst().orElse(null);
-        if (entity != null) {
-            log.info(String.format("Factory already exist:%n%s", entity.toString()));
-            factory.setId(entity.getId());
-            updateFactory(factory);
-            return entity;
-        } else {
-            log.info(String.format("Add new factory:%n%s", factory.toString()));
-            FactoryEntity newFactory = factoryRepository.saveAndFlush(factory);
-            log.info(String.format("id for new factory: %d", newFactory.getId()));
-            return newFactory;
+        Collection<FactoryEntity> factories = factory.getType().getFactories();
+        if (factories != null) {
+            FactoryEntity entity = factories.stream().filter((f) -> f.getName().equals(factory.getName())).findFirst().orElse(null);
+            if (entity != null) {
+                log.info(String.format("Factory already exist:%n%s", entity.toString()));
+                factory.setId(entity.getId());
+                updateFactory(factory);
+                return entity;
+            }
         }
+        log.info(String.format("Add new factory:%n%s", factory.toString()));
+        FactoryEntity newFactory = factoryRepository.saveAndFlush(factory);
+        log.info(String.format("id for new factory: %d", newFactory.getId()));
+        return newFactory;
     }
 
     @Override
