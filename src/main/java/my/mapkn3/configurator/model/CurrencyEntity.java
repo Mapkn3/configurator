@@ -15,4 +15,7 @@ public class CurrencyEntity {
     @Basic
     @Column(name = "name", unique = true, nullable = false)
     private String name;
+    @Basic
+    @Column(name = "symbol", unique = true, nullable = false)
+    private String symbol;
 }

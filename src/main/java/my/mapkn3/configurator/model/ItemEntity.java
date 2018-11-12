@@ -14,6 +14,9 @@ public class ItemEntity {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
     @Basic
+    @Column(name = "url")
+    private String url;
+    @Basic
     @Column(name = "model", unique = true, nullable = false)
     private String model;
     @Basic
@@ -76,4 +79,33 @@ public class ItemEntity {
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false)
     private GroupEntity group;
+
+    public ItemEntity() {}
+
+    public ItemEntity(String url, String model, String ourArticle, String factoryArticle, BigDecimal cost, long balance, String description, String pathToPhoto, String comment, CurrencyEntity currency, GroupEntity group) {
+        this.url = url;
+        this.model = model;
+        this.ourArticle = ourArticle;
+        this.factoryArticle = factoryArticle;
+        this.cost = cost;
+        this.balance = balance;
+        this.description = description;
+        this.pathToPhoto = pathToPhoto;
+        this.comment = comment;
+        this.currency = currency;
+        this.group = group;
+
+        this.eup = cost.multiply(BigDecimal.valueOf(1.7));
+        this.ddp0 = cost.multiply(BigDecimal.valueOf(1.1));
+        this.ddp1 = cost.multiply(BigDecimal.valueOf(1.2));
+        this.ddp2 = cost.multiply(BigDecimal.valueOf(1.3));
+        this.ddp3 = cost.multiply(BigDecimal.valueOf(1.4));
+        this.ddp4 = cost.multiply(BigDecimal.valueOf(1.5));
+        this.ddp1min = cost.multiply(BigDecimal.valueOf(1.05));
+        this.exw = cost.multiply(BigDecimal.valueOf(2));
+
+        this.series = this.group.getSeries();
+        this.factory = this.series.getFactory();
+        this.type = this.factory.getType();
+    }
 }

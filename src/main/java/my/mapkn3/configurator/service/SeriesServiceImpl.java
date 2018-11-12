@@ -103,8 +103,6 @@ public class SeriesServiceImpl implements SeriesService {
             SeriesEntity entity = seriesEntities.stream().filter((s) -> s.getName().equals(series.getName())).findFirst().orElse(null);
             if (entity != null) {
                 log.info(String.format("Series already exist:%n%s", entity.toString()));
-                series.setId(entity.getId());
-                updateSeries(series);
                 return entity;
             }
         }

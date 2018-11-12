@@ -29,10 +29,20 @@ public class SeriesEntity {
     @NonNull
     @Column(name = "article")
     private String article;
-    @ManyToOne
     @NonNull
+    @ManyToOne
     @JoinColumn(name = "factory_id", referencedColumnName = "id", nullable = false)
     private FactoryEntity factory;
-    @OneToMany(mappedBy = "series")
+    @OneToMany(mappedBy = "series", cascade = CascadeType.REMOVE)
     private Collection<GroupEntity> groups;
+
+    public SeriesEntity() {}
+
+    public SeriesEntity(String name, String description, String article, FactoryEntity factory) {
+        this.id = 0;
+        this.name = name;
+        this.description = description;
+        this.article = article;
+        this.factory = factory;
+    }
 }

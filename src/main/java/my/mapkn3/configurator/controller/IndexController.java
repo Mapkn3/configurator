@@ -1,63 +1,93 @@
 package my.mapkn3.configurator.controller;
 
 import my.mapkn3.configurator.CurrencyRates.CurrencyRatesService;
+import my.mapkn3.configurator.model.CommercialOffer;
+import my.mapkn3.configurator.model.CurrencyEntity;
 import my.mapkn3.configurator.model.ItemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@SessionAttributes(types = {IndexController.FilterConfig.class, CurrencyRatesService.class}, names = "items")
 public class IndexController extends MainController {
 
-    @Autowired
-    CurrencyRatesService currencyRatesService;
+    private final CurrencyRatesService currencyRatesService;
+    private CommercialOffer commercialOffer;
 
-    @RequestMapping(value = "/currencyRate", method = RequestMethod.GET)
-    public String currencyRate() {
-        System.out.println(currencyRatesService.getUSD());
-        System.out.println(currencyRatesService.getEUR());
-        return "redirect:/";
+    @Autowired
+    public IndexController(CurrencyRatesService currencyRatesService) {
+        this.currencyRatesService = currencyRatesService;
+        this.commercialOffer = new CommercialOffer(currencyRatesService);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showAll(ModelMap model) {
         currencyRatesService.updateCurrencyRates();
-        model.addAttribute("filter", new FilterConfig());
-        model.addAttribute("items", itemService.getAllItems());
+        if (!model.containsAttribute("filter")) {
+            model.addAttribute("filter", new FilterConfig());
+        }
+        if (!model.containsAttribute("items")) {
+            model.addAttribute("items", itemService.getAllItems());
+        }
+        if (!model.containsAttribute("currencyRateService")) {
+            model.addAttribute("currencyRateService", currencyRatesService);
+        }
+        if (!model.containsAttribute("commercialOffer")) {
+            model.addAttribute("commercialOffer", commercialOffer);
+        }
+        model.addAttribute("currency", currencyService.getCurrencyByName("RUR"));
         return "index";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public String showItem(FilterConfig filter, ModelMap model) {
-        List<ItemEntity> items = new ArrayList<>();
+        List<ItemEntity> itemEntities;
         switch (filter.getCurrentFilter()) {
             case ALL:
-                items = itemService.getAllItems();
+                itemEntities = itemService.getAllItems();
                 break;
             case TYPE:
-                items = itemService.getAllByType(typeService.getTypeById(filter.getCurrentId()));
+                itemEntities = itemService.getAllByType(typeService.getTypeById(filter.getCurrentId()));
                 break;
             case FACTORY:
-                items = itemService.getAllByFactory(factoryService.getFactoryById(filter.getCurrentId()));
+                itemEntities = itemService.getAllByFactory(factoryService.getFactoryById(filter.getCurrentId()));
                 break;
             case SERIES:
-                items = itemService.getAllBySeries(seriesService.getSeriesById(filter.getCurrentId()));
+                itemEntities = itemService.getAllBySeries(seriesService.getSeriesById(filter.getCurrentId()));
                 break;
             case GROUP:
-                items = itemService.getAllByGroup(groupService.getGroupById(filter.getCurrentId()));
+                itemEntities = itemService.getAllByGroup(groupService.getGroupById(filter.getCurrentId()));
+                break;
+            default:
+                itemEntities = itemService.getAllItems();
                 break;
         }
         model.addAttribute("filter", filter);
-        model.addAttribute("items", items);
-        return "index";
+        model.addAttribute("items", itemEntities);
+        return showAll(model);
+    }
+
+    @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
+    public String addItem(@PathVariable("id") long id) {
+        commercialOffer.addItem(itemService.getById(id));
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
+    public String removeItem(@PathVariable("id") long id) {
+        commercialOffer.removeItemById(id);
+        return "redirect:/";
     }
 
     public static class FilterConfig {
+        private CurrencyEntity currency;
         private String tfsgConfig;//type > factory > series > group
 
         public String getTfsgConfig() {
@@ -66,6 +96,14 @@ public class IndexController extends MainController {
 
         public void setTfsgConfig(String tfsgConfig) {
             this.tfsgConfig = tfsgConfig;
+        }
+
+        public CurrencyEntity getCurrency() {
+            return currency;
+        }
+
+        public void setCurrency(CurrencyEntity currency) {
+            this.currency = currency;
         }
 
         public Filter getCurrentFilter() {

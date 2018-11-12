@@ -1,1 +1,1 @@
-MERGE INTO currency_table KEY(id) VALUES (0, 'RUR'), (1, 'USD'), (2, 'EUR');
+MERGE INTO currency_table KEY(id) VALUES (0, 'RUR', '₽'), (1, 'USD', '$'), (2, 'EUR', '€');

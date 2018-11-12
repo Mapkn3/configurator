@@ -1,7 +1,6 @@
 package my.mapkn3.configurator.model;
 
 import lombok.Data;
-import lombok.NonNull;
 
 import javax.persistence.*;
 
@@ -14,11 +13,17 @@ public class GroupEntity {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
     @Basic
-    @NonNull
     @Column(name = "name")
     private String name;
     @ManyToOne
-    @NonNull
     @JoinColumn(name = "series_id", referencedColumnName = "id", nullable = false)
     private SeriesEntity series;
+
+    public GroupEntity() {}
+
+    public GroupEntity(String name, SeriesEntity series) {
+        this.id = 0;
+        this.name = name;
+        this.series = series;
+    }
 }

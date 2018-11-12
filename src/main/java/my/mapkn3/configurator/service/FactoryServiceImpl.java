@@ -85,8 +85,6 @@ public class FactoryServiceImpl implements FactoryService {
             FactoryEntity entity = factories.stream().filter((f) -> f.getName().equals(factory.getName())).findFirst().orElse(null);
             if (entity != null) {
                 log.info(String.format("Factory already exist:%n%s", entity.toString()));
-                factory.setId(entity.getId());
-                updateFactory(factory);
                 return entity;
             }
         }

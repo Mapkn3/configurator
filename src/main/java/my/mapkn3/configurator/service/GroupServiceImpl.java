@@ -96,8 +96,6 @@ public class GroupServiceImpl implements GroupService {
             GroupEntity entity = groups.stream().filter((g) -> g.getName().equals(group.getName())).findFirst().orElse(null);
             if (entity != null) {
                 log.info(String.format("Group already exist:%n%s", entity.toString()));
-                group.setId(entity.getId());
-                updateGroup(group);
                 return entity;
             }
         }

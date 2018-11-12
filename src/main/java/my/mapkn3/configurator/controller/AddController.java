@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,6 +95,15 @@ public class AddController extends MainController {
         if (bindingResult.hasErrors()) {
             return "newItem";
         }
+        itemEntity.setEup(itemEntity.getCost().multiply(BigDecimal.valueOf(1.7)));
+        itemEntity.setDdp0(itemEntity.getCost().multiply(BigDecimal.valueOf(1.1)));
+        itemEntity.setDdp1(itemEntity.getCost().multiply(BigDecimal.valueOf(1.2)));
+        itemEntity.setDdp2(itemEntity.getCost().multiply(BigDecimal.valueOf(1.3)));
+        itemEntity.setDdp3(itemEntity.getCost().multiply(BigDecimal.valueOf(1.4)));
+        itemEntity.setDdp4(itemEntity.getCost().multiply(BigDecimal.valueOf(1.5)));
+        itemEntity.setDdp1min(itemEntity.getCost().multiply(BigDecimal.valueOf(1.05)));
+        itemEntity.setExw(itemEntity.getCost().multiply(BigDecimal.valueOf(2)));
+
         itemEntity.setSeries(itemEntity.getGroup().getSeries());
         itemEntity.setFactory(itemEntity.getSeries().getFactory());
         itemEntity.setType(itemEntity.getFactory().getType());
@@ -107,6 +117,7 @@ public class AddController extends MainController {
     @RequestMapping(value = "/createDatabase", method = RequestMethod.GET)
     public String addAll() {
         if (isFirstStart) {
+            System.out.println("Create database");
             List<TypeEntity> types = new ArrayList<TypeEntity>() {{
                 add(typeService.addType(new TypeEntity("ИБП")));
                 add(typeService.addType(new TypeEntity("Батарейные комплекты")));
@@ -313,6 +324,30 @@ public class AddController extends MainController {
                 add(groupService.addGroup(new GroupEntity("20", series.get(58))));
                 add(groupService.addGroup(new GroupEntity("25", series.get(58))));
             }};
+
+            List<ItemEntity> items = new ArrayList<ItemEntity>() {{
+                add(itemService.addItem(new ItemEntity("https:/", "400", "GMV400", "EA240", new BigDecimal(29.9), 1, "400ВА/240Вт, 12В/4.5Ач (5 мин.), 230В±25%, 100х280х140мм, 3,8кг", "/", "LED, 2xEU, USB, RJ11", allCurrencies().get(1), groups.get(0))));
+                add(itemService.addItem(new ItemEntity("https:/", "600", "GMV600", "EA260", new BigDecimal(31.2), 1, "600ВА/360Вт, 12В/7Ач (5 мин.), 230В±25%, 100х280х140мм, 4,3кг", "/", "LED, 2xEU, USB, RJ11", allCurrencies().get(1), groups.get(0))));
+                add(itemService.addItem(new ItemEntity("https:/", "800", "GMV800", "EA280", new BigDecimal(39.0), 1, "800ВА/480Вт, 12В/8Ач (5 мин.), 230В±25%, 100х280х140мм, 6,7кг", "/", "LED, 2xEU, USB, RJ11", allCurrencies().get(1), groups.get(0))));
+                add(itemService.addItem(new ItemEntity("https:/", "1200LCD", "GMV1200LCD", "EA2120", new BigDecimal(61.23), 1, "1200ВА/720Вт, 12В/2х7Ач (10 мин.), 230В±25%, 140х345х170мм, 9,5кг", "/", "LCD, 3xEU, USB, RJ45", allCurrencies().get(1), groups.get(0))));
+                add(itemService.addItem(new ItemEntity("https:/", "1500LCD", "GMV1500LCD", "EA2120", new BigDecimal(82.29), 1, "1500ВА/900Вт, 12В/2х8Ач (10 мин.), 230В±25%, 140х345х170мм, 10,7кг", "/", "LCD, 3xEU, USB, RJ45", allCurrencies().get(1), groups.get(0))));
+                add(itemService.addItem(new ItemEntity("https:/", "650PLUS", "GMV650PLUS", "EA260P", new BigDecimal(37.05), 1, "650ВА/390Вт, 12В/7Ач (5 мин.), 230В±25%, 185х280х95мм, 5.5кг", "/", "", allCurrencies().get(1), groups.get(0))));
+                add(itemService.addItem(new ItemEntity("https:/", "850PLUS", "GMV850PLUS", "EA280P", new BigDecimal(44.85), 1, "850ВА/510Вт, 12В/8Ач (5 мин.), 230В±25%, 185х280х95мм, 6.5кг", "/", "", allCurrencies().get(1), groups.get(0))));
+
+                add(itemService.addItem(new ItemEntity("https:/", "1200RM", "GMV1200RM", "EA2120", new BigDecimal(93.73), 1, "LCD, 2xIEC, USB, RJ11", "/", "1200ВА/720Вт, 10 мин., 230В±25%, 480х350х88 (2U)мм, 12,6кг", allCurrencies().get(1), groups.get(1))));
+                add(itemService.addItem(new ItemEntity("https:/", "1500RM", "GMV1500RM", "EA2150", new BigDecimal(117.0), 1, "LCD, 2xIEC, USB, RJ11", "/", "1500ВА/900Вт, 10 мин., 230В±25%, 480х350х150 (3U)мм, 15,8кг", allCurrencies().get(1), groups.get(1))));
+
+                add(itemService.addItem(new ItemEntity("https:/", "S1000N", "SVS1000N", "EA610", new BigDecimal(98.8), 1, "1000ВА / 800Вт, 2х7Ач, 220/230/240В±26%, 144х345х215мм, 12,2кг", "/", "3xIEC", allCurrencies().get(1), groups.get(2))));
+                add(itemService.addItem(new ItemEntity("https:/", "S1500N", "SVS1500N", "EA615", new BigDecimal(118.3), 1, "1500ВА / 1200Вт, 2х8Ач, 220/230/240В±26%, 144х345х215мм, 14,2кг", "/", "3xIEC", allCurrencies().get(1), groups.get(2))));
+                add(itemService.addItem(new ItemEntity("https:/", "S2000N", "SVS2000N", "EA620", new BigDecimal(144.3), 1, "2000ВА / 1600Вт, 3х9Ач, 220/230/240В±26%, 144х410х215мм, 18,5кг", "/", "3xIEC", allCurrencies().get(1), groups.get(2))));
+                add(itemService.addItem(new ItemEntity("https:/", "S3000N", "SVS3000N", "EA630", new BigDecimal(198.9), 1, "3000ВА / 2400Вт, 4х9Ач, 220/230/240В±26%, 190х467х335.5мм, 28,1кг", "/", "4xIEC", allCurrencies().get(1), groups.get(2))));
+
+                add(itemService.addItem(new ItemEntity("https:/", "S1000N LT", "SVS1000NLT", "EA610", new BigDecimal(95.5), 1, "1000ВА / 800Вт, 24В, 220/230/240В±26%, 144х345х215мм, 11,6кг", "/", "3xIEC", allCurrencies().get(1), groups.get(3))));
+                add(itemService.addItem(new ItemEntity("https:/", "S2000N LT", "SVS2000NLT", "EA620", new BigDecimal(131.04), 1, "2000ВА / 1600Вт, 48В, 220/230/240В±26%, 144х345х215мм, 17,8кг", "/", "3xIEC", allCurrencies().get(1), groups.get(3))));
+                add(itemService.addItem(new ItemEntity("https:/", "S3000N LT", "SVS3000NLT", "EA630", new BigDecimal(183.3), 1, "3000ВА / 2400Вт, 48В, 220/230/240В±26%, 190х467х335.5мм, 28кг", "/", "4xIEC", allCurrencies().get(1), groups.get(3))));
+            }};
+            //add(itemService.addItem(new ItemEntity("https:/", "", "", "", new BigDecimal(0.0), 1, "", "/", "", allCurrencies().get(1), groups.get(0))));
+            isFirstStart = false;
         }
         return "redirect:/";
     }

@@ -207,8 +207,6 @@ public class ItemServiceImpl implements ItemService {
         ItemEntity entity = itemRepository.findByModel(item.getModel()).orElse(null);
         if (entity != null) {
             log.info(String.format("Item already exist:%n%s", entity.toString()));
-            item.setId(entity.getId());
-            updateItem(item);
             return entity;
         } else {
             log.info(String.format("Add new item:%n%s", item.toString()));

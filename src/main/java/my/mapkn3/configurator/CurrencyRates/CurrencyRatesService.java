@@ -12,23 +12,24 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 
 @Service
 public class CurrencyRatesService {
-    private String usd = null;
-    private String eur = null;
+    private BigDecimal usd = null;
+    private BigDecimal eur = null;
 
-    public String getUSD() {
+    public BigDecimal getUSD() {
         if (this.usd == null) {
             updateCurrencyRates();
         }
         return this.usd;
     }
 
-    public String getEUR() {
+    public BigDecimal getEUR() {
         if (this.eur == null) {
             updateCurrencyRates();
         }
@@ -55,10 +56,10 @@ public class CurrencyRatesService {
                 if (firstPersonNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) firstPersonNode;
                     if (getElementValue(element, "CharCode").equals("USD")) {
-                        this.usd = getElementValue(element, "Value");
+                        this.usd = new BigDecimal(getElementValue(element, "Value").replace(',', '.'));
                     }
                     if (getElementValue(element, "CharCode").equals("EUR")) {
-                        this.eur = getElementValue(element, "Value");
+                        this.eur = new BigDecimal(getElementValue(element, "Value").replace(',', '.'));
                     }
                     /*
                     System.out.println(getElementValue(element, "NumCode") + ", "
