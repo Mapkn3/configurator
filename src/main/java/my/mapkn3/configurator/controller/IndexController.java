@@ -19,17 +19,21 @@ import java.util.List;
 public class IndexController extends MainController {
 
     private final CurrencyRatesService currencyRatesService;
-    private CommercialOffer commercialOffer;
+    private CurrencyEntity currentCurrency;
+    private CommercialOffer commercialOffer = null;
 
     @Autowired
     public IndexController(CurrencyRatesService currencyRatesService) {
         this.currencyRatesService = currencyRatesService;
-        this.commercialOffer = new CommercialOffer(currencyRatesService);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showAll(ModelMap model) {
         currencyRatesService.updateCurrencyRates();
+        if (commercialOffer == null) {
+            currentCurrency = currencyService.getCurrencyByName("RUR");
+            commercialOffer = new CommercialOffer(currencyRatesService, currentCurrency);
+        }
         if (!model.containsAttribute("filter")) {
             model.addAttribute("filter", new FilterConfig());
         }
@@ -40,9 +44,9 @@ public class IndexController extends MainController {
             model.addAttribute("currencyRateService", currencyRatesService);
         }
         if (!model.containsAttribute("commercialOffer")) {
+            commercialOffer.setCurrency(currentCurrency);
             model.addAttribute("commercialOffer", commercialOffer);
         }
-        model.addAttribute("currency", currencyService.getCurrencyByName("RUR"));
         return "index";
     }
 
@@ -83,6 +87,12 @@ public class IndexController extends MainController {
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
     public String removeItem(@PathVariable("id") long id) {
         commercialOffer.removeItemById(id);
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/recalculate", method = RequestMethod.POST)
+    public String changeCurrencyForTotalPrice(CommercialOffer commercialOffer) {
+        currentCurrency = commercialOffer.getCurrency();
         return "redirect:/";
     }
 

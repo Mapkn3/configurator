@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("my.mapkn3.configurator.model")
 @SpringBootApplication
 public class ConfiguratorApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(ConfiguratorApplication.class, args);
     }

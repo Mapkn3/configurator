@@ -2,6 +2,8 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Конфигуратор</title>
     <!--<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
     <script th:src="@{/js/jquery.dependent-selects.js}"></script>
@@ -14,58 +16,8 @@
     </script>-->
 </head>
 <body>
-<div>
+<div class="container-fluid">
     <a href="newEntity.html" th:href="@{/new}">Создать</a>
-    <form th:action="@{/}" th:object="${filter}" method="post" id="main">
-        <label for="currencies">Валюты</label>
-        <select id="currencies">
-            <option value="-1">-</option>
-            <option th:each="currency:${allCurrencies}" th:text="${currency.name}" th:value="${currency.id}">Валюта
-            </option>
-        </select>
-        <!--<label for="filter">Завод: </label>
-        <select class="filter" id="filter" th:field="*{tfsgConfig}">
-            <option th:text="${'Все заводы > Все серии > Все группы'}" th:value="${'-1|-1|-1'}">фильтр</option>
-            <option th:value="${''}"></option>
-            <option th:each="factory:${allFactories}" th:text="${factory.name}+' > Все серии > Все группы'" th:value="${factory.id}+'|-1|-1'">фильтр</option>
-            <option th:each="series:${allSeries}" th:text="'Все заводы > '+${series.name}+' > Все группы'" th:value="'-1|'+${series.id}+'|-1'">фильтр</option>
-            <option th:each="group:${allGroups}" th:text="'Все заводы > Все серии > '+${group.name}" th:value="'-1|-1|'+${group.id}">фильтр</option>
-            <option th:each="series:${allSeries}" th:text="${series.factory.name}+' > '+${series.name}+' > Все группы'" th:value="${series.factory.id}+'|'+${series.id}+'|-1'">фильтр</option>
-            <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > Все серии > '+${group.name}" th:value="${group.series.factory.id}+'|-1|'+${group.id}">фильтр</option>
-            <option th:each="group:${allGroups}" th:text="'Все заводы > '+${group.series.name}+' > '+${group.name}" th:value="'-1|'+${group.series.id}+'|'+${group.id}">фильтр</option>
-            <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > '+${group.series.name}+' > '+${group.name}" th:value="${group.series.factory.id}+'|'+${group.series.id}+'|'+${group.id}">фильтр</option>
-        </select>-->
-        <label for="filter">Фильтр</label>
-        <select id="filter" th:field="*{tfsgConfig}">
-            <option th:text="${'Все'}" th:value="${'ALL'}">Все</option>
-            <optgroup label="________________________________ Типы ________________________________"></optgroup>
-            <option th:each="type:${allTypes}" th:text="${type.name}" th:value="${'T:'+type.id}">
-                Тип
-            </option>
-            <optgroup label="_______________________________ Заводы _______________________________"></optgroup>
-            <optgroup th:each="type:${allTypes}" th:label="${type.name}" label="Список заводов">
-                <option th:each="factory:${type.factories}" th:text="${factory.name}" th:value="${'F:'+factory.id}">
-                    Завод
-                </option>
-            </optgroup>
-            <optgroup label="________________________________ Серии _______________________________"></optgroup>
-            <optgroup th:each="factory:${allFactories}" th:label="${factory.type.name+' > '+factory.name}"
-                      label="Список серия">
-                <option th:each="series:${factory.series}" th:text="${series.name}" th:value="${'S:'+series.id}">
-                    Серия
-                </option>
-            </optgroup>
-            <optgroup label="_______________________________ Группы _______________________________"></optgroup>
-            <optgroup th:each="series:${allSeries}"
-                      th:label="${series.factory.type.name+' > '+series.factory.name+' > '+series.name}"
-                      label="Список групп">
-                <option th:each="group:${series.groups}" th:text="${group.name}" th:value="${'G:'+group.id}">
-                    Группа
-                </option>
-            </optgroup>
-        </select>
-        <button type="submit" form="main">Отправить</button>
-    </form>
 
     <div>
         <span th:text="${'Курс валют ЦБ РФ на '+#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')+': '}">Дата</span>
@@ -73,42 +25,8 @@
         </div>
     </div>
 
-    <table border="1" cellspacing="0">
-        <thead>
-        <tr>
-            <td></td>
-            <td>Серия</td>
-            <td>Группа</td>
-            <td>Модель</td>
-            <td>Наш артикул</td>
-            <td>Артикул завода</td>
-            <td>Цена</td>
-            <td>Остаток</td>
-            <td>Примечание</td>
-            <td>Описание</td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item:${items}">
-            <td>
-                <form th:action="@{'/add/'+${item.id}}" method="post">
-                    <button type="submit">+</button>
-                </form>
-            </td>
-            <td th:text="${item.series.name}">Серия</td>
-            <td th:text="${item.group.name}">Группа</td>
-            <td th:text="${item.model}">Модель</td>
-            <td th:text="${item.ourArticle}">Наш артикул</td>
-            <td th:text="${item.factoryArticle}">Артикул завода</td>
-            <td th:text="${item.currency.symbol+' '+item.cost}">Цена</td>
-            <td th:text="${item.balance}">Остаток</td>
-            <td th:text="${item.comment}">Комментарий</td>
-            <td th:text="${item.description}">Описание</td>
-        </tr>
-        </tbody>
-    </table>
     <div>
-        <table border="1" cellspacing="0">
+        <table class="table table-bordered">
             <thead>
             <tr>
                 <td>Модель</td>
@@ -122,19 +40,114 @@
             <tr th:each="item:${commercialOffer.items}">
                 <td th:text="${item.model}">Модель</td>
                 <td th:text="${item.article}">Артикул</td>
-                <td th:text="${item.cost+' '+item.currency.symbol}">Цена</td>
+                <td th:text="${item.cost+item.currency.symbol}">Цена</td>
                 <td>
-                    <button type="submit" th:form="${'add'+item.id}">+</button>
+                    <button type="submit" th:form="${'add'+item.id}"><span class="glyphicon glyphicon-plus"></span>+
+                    </button>
                     <span th:text="${item.count}">Количество</span>
-                    <button type="submit" th:form="${'remove'+item.id}">-</button>
+                    <button type="submit" th:form="${'remove'+item.id}"><span class="glyphicon glyphicon-minus"></span>-
+                    </button>
                     <form th:action="@{'add/'+${item.id}}" method="post" th:id="${'add'+item.id}"></form>
                     <form th:action="@{'remove/'+${item.id}}" method="post" th:id="${'remove'+item.id}"></form>
                 </td>
-                <td th:text="${(item.cost*item.count)+' '+item.currency.symbol}">Итоговая стоимость</td>
+                <td th:text="${(item.cost*item.count)+item.currency.symbol}">Итоговая стоимость</td>
             </tr>
             </tbody>
         </table>
-        <span th:text="${'Итого: '+commercialOffer.getTotalPriceForCurrency(currency)+'₽'}">Итого</span>
+        <form th:action="@{/recalculate}" th:object="${commercialOffer}" method="post">
+            <label for="currencies">Рассчитать для:</label>
+            <select id="currencies" th:field="*{currency}">
+                <option th:each="currency:${allCurrencies}" th:text="${currency.name}" th:value="${currency.id}">
+                    Валюта
+                </option>
+            </select>
+            <button type="submit">Рассчитать</button>
+        </form>
+        <span th:text="${'Итого: '+commercialOffer.getTotalPrice()+commercialOffer.currency.symbol}">Итого</span>
+    </div>
+
+    <div>
+        <form th:action="@{/}" th:object="${filter}" method="post" id="main">
+            <!--<label for="filter">Завод: </label>
+            <select class="filter" id="filter" th:field="*{tfsgConfig}">
+                <option th:text="${'Все заводы > Все серии > Все группы'}" th:value="${'-1|-1|-1'}">фильтр</option>
+                <option th:value="${''}"></option>
+                <option th:each="factory:${allFactories}" th:text="${factory.name}+' > Все серии > Все группы'" th:value="${factory.id}+'|-1|-1'">фильтр</option>
+                <option th:each="series:${allSeries}" th:text="'Все заводы > '+${series.name}+' > Все группы'" th:value="'-1|'+${series.id}+'|-1'">фильтр</option>
+                <option th:each="group:${allGroups}" th:text="'Все заводы > Все серии > '+${group.name}" th:value="'-1|-1|'+${group.id}">фильтр</option>
+                <option th:each="series:${allSeries}" th:text="${series.factory.name}+' > '+${series.name}+' > Все группы'" th:value="${series.factory.id}+'|'+${series.id}+'|-1'">фильтр</option>
+                <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > Все серии > '+${group.name}" th:value="${group.series.factory.id}+'|-1|'+${group.id}">фильтр</option>
+                <option th:each="group:${allGroups}" th:text="'Все заводы > '+${group.series.name}+' > '+${group.name}" th:value="'-1|'+${group.series.id}+'|'+${group.id}">фильтр</option>
+                <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > '+${group.series.name}+' > '+${group.name}" th:value="${group.series.factory.id}+'|'+${group.series.id}+'|'+${group.id}">фильтр</option>
+            </select>-->
+            <label for="filter">Фильтр</label>
+            <select id="filter" th:field="*{tfsgConfig}">
+                <option th:text="${'Все'}" th:value="${'ALL'}">Все</option>
+                <optgroup label="________________________________ Типы ________________________________"></optgroup>
+                <option th:each="type:${allTypes}" th:text="${type.name}" th:value="${'T:'+type.id}">
+                    Тип
+                </option>
+                <optgroup label="_______________________________ Заводы _______________________________"></optgroup>
+                <optgroup th:each="type:${allTypes}" th:label="${type.name}" label="Список заводов">
+                    <option th:each="factory:${type.factories}" th:text="${factory.name}" th:value="${'F:'+factory.id}">
+                        Завод
+                    </option>
+                </optgroup>
+                <optgroup label="________________________________ Серии _______________________________"></optgroup>
+                <optgroup th:each="factory:${allFactories}" th:label="${factory.type.name+' > '+factory.name}"
+                          label="Список серия">
+                    <option th:each="series:${factory.series}" th:text="${series.name}" th:value="${'S:'+series.id}">
+                        Серия
+                    </option>
+                </optgroup>
+                <optgroup label="_______________________________ Группы _______________________________"></optgroup>
+                <optgroup th:each="series:${allSeries}"
+                          th:label="${series.factory.type.name+' > '+series.factory.name+' > '+series.name}"
+                          label="Список групп">
+                    <option th:each="group:${series.groups}" th:text="${group.name}" th:value="${'G:'+group.id}">
+                        Группа
+                    </option>
+                </optgroup>
+            </select>
+            <button type="submit" form="main">Отправить</button>
+        </form>
+    </div>
+
+    <div>
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+            <tr>
+                <td></td>
+                <td>Серия</td>
+                <td>Группа</td>
+                <td>Модель</td>
+                <td>Наш артикул</td>
+                <td>Артикул завода</td>
+                <td>Цена</td>
+                <td>Остаток</td>
+                <td>Примечание</td>
+                <td>Описание</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item:${items}">
+                <td>
+                    <form th:action="@{'/add/'+${item.id}}" method="post">
+                        <button type="submit"><span class="glyphicon glyphicon-plus"></span>+</button>
+                    </form>
+                </td>
+                <td th:text="${item.series.name}">Серия</td>
+                <td th:text="${item.group.name}">Группа</td>
+                <td th:text="${item.model}">Модель</td>
+                <td th:text="${item.ourArticle}">Наш артикул</td>
+                <td th:text="${item.factoryArticle}">Артикул завода</td>
+                <td th:text="${item.cost+item.currency.symbol}">Цена</td>
+                <td th:text="${item.balance}">Остаток</td>
+                <td th:text="${item.comment}">Комментарий</td>
+                <td th:text="${item.description}">Описание</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>

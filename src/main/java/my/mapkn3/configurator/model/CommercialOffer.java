@@ -3,7 +3,6 @@ package my.mapkn3.configurator.model;
 import my.mapkn3.configurator.CurrencyRates.CurrencyRatesService;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +10,37 @@ import java.util.stream.Collectors;
 
 public class CommercialOffer {
     private CurrencyRatesService currencyRatesService;
-    private List<Item> items = new ArrayList<>();
+    private CurrencyEntity currency;
+    private List<Item> items;
 
-    public CommercialOffer(CurrencyRatesService currencyRatesService) {
+    public CommercialOffer(CurrencyRatesService currencyRatesService, CurrencyEntity currency) {
         this.currencyRatesService = currencyRatesService;
+        this.currency = currency;
+        this.items = new ArrayList<>();
+    }
+
+    public CurrencyRatesService getCurrencyRatesService() {
+        return currencyRatesService;
+    }
+
+    public void setCurrencyRatesService(CurrencyRatesService currencyRatesService) {
+        this.currencyRatesService = currencyRatesService;
+    }
+
+    public CurrencyEntity getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(CurrencyEntity currency) {
+        this.currency = currency;
     }
 
     public List<Item> getItems() {
         return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public void addItem(ItemEntity itemEntity) {
@@ -41,17 +63,17 @@ public class CommercialOffer {
         items = items.stream().filter(item -> item.count > 0).collect(Collectors.toList());
     }
 
-    public BigDecimal getTotalPriceForCurrency(CurrencyEntity currencyEntity) {
+    public BigDecimal getTotalPrice() {
         return items.stream()
                 .map(item -> item.getCurrency().getName().equals("EUR") ?
                         item.getCost().multiply(currencyRatesService.getEUR()).multiply(BigDecimal.valueOf(item.count)) :
                         item.getCurrency().getName().equals("USD") ?
                                 item.getCost().multiply(currencyRatesService.getUSD()).multiply(BigDecimal.valueOf(item.count)) :
                                 item.getCost().multiply(BigDecimal.valueOf(item.count)))
-                .map(cost -> currencyEntity.getName().equals("EUR") ?
-                        cost.divide(currencyRatesService.getEUR(), new MathContext(0)) :
-                        currencyEntity.getName().equals("USD") ?
-                                cost.divide(currencyRatesService.getUSD(), new MathContext(0)) :
+                .map(cost -> currency.getName().equals("EUR") ?
+                        cost.divide(currencyRatesService.getEUR(), 6, RoundingMode.HALF_UP) :
+                        currency.getName().equals("USD") ?
+                                cost.divide(currencyRatesService.getUSD(), 6, RoundingMode.HALF_UP) :
                                 cost)
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);
     }
