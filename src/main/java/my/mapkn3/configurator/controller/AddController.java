@@ -95,6 +95,8 @@ public class AddController extends MainController {
         if (bindingResult.hasErrors()) {
             return "newItem";
         }
+        itemEntity.setPathToPhoto("");
+
         itemEntity.setEup(itemEntity.getCost().multiply(BigDecimal.valueOf(1.7)));
         itemEntity.setDdp0(itemEntity.getCost().multiply(BigDecimal.valueOf(1.1)));
         itemEntity.setDdp1(itemEntity.getCost().multiply(BigDecimal.valueOf(1.2)));

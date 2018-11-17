@@ -7,20 +7,51 @@
     <title>Новая серия</title>
 </head>
 <body>
-<div class="container">
-    <form action="#" th:action="@{/new/series}" th:object="${series}" method="post">
+<div class="jumbotron">
+    <form action="#" th:action="@{/new/series}" th:object="${series}" method="post" class="container">
         <input type="hidden" value="0" th:field="*{id}"/>
-        <label for="seriesName">Название:</label>
-        <input type="text" id="seriesName" th:field="*{name}">
-        <label for="seriesDescription">Описание:</label>
-        <input type="text" id="seriesDescription" th:field="*{description}">
-        <label for="seriesArticle">Артикул:</label>
-        <input type="text" id="seriesArticle" th:field="*{article}">
-        <label for="factories">Завод:</label>
-        <select id="factories" th:field="*{factory}">
-            <option th:each="factory:${allFactories}" th:text="|${factory.type.name}: ${factory.name}|" th:value="${factory.id}">Завод</option>
-        </select>
-        <button type="submit">Создать новую серию</button>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="seriesName">Название:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="seriesName" th:field="*{name}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="seriesDescription">Описание:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="seriesDescription" th:field="*{description}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="seriesArticle">Артикул:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="seriesArticle" th:field="*{article}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="factories">Завод:</label>
+            </div>
+            <div class="col-8">
+                <select id="factories" th:field="*{factory}" class="w-100">
+                    <option th:each="factory:${allFactories}" th:text="|${factory.type.name}: ${factory.name}|"
+                            th:value="${factory.id}">Завод
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4"></div>
+            <div class="col-8">
+                <button type="submit">Создать новую серию</button>
+            </div>
+        </div>
     </form>
 </div>
 </body>

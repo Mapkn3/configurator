@@ -7,16 +7,33 @@
     <title>Новый завод</title>
 </head>
 <body>
-<div class="container">
-    <form action="#" th:action="@{/new/factory}" th:object="${factory}" method="post">
+<div class="jumbotron">
+    <form action="#" th:action="@{/new/factory}" th:object="${factory}" method="post" class="container">
         <input type="hidden" value="0" th:field="*{id}"/>
-        <label for="factoryName">Название:</label>
-        <input type="text" id="factoryName" th:field="*{name}"/>
-        <label for="type">Тип производимой продукции:</label>
-        <select id="type" th:field="*{type}">
-            <option th:each="type:${allTypes}" th:text="${type.name}" th:value="${type.id}">Тип</option>
-        </select>
-        <button type="submit">Создать новый завод</button>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="factoryName">Название:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="factoryName" th:field="*{name}" class="w-100"/>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="type">Тип производимой продукции:</label>
+            </div>
+            <div class="col-8">
+                <select id="type" th:field="*{type}" class="w-100">
+                    <option th:each="type:${allTypes}" th:text="${type.name}" th:value="${type.id}">Тип</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4"></div>
+            <div class="col-8">
+                <button type="submit">Создать новый завод</button>
+            </div>
+        </div>
     </form>
 </div>
 </body>

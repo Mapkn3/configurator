@@ -7,16 +7,35 @@
     <title>Новая группа</title>
 </head>
 <body>
-<div class="container">
-    <form action="#" th:action="@{/new/group}" th:object="${group}" method="post">
+<div class="jumbotron">
+    <form action="#" th:action="@{/new/group}" th:object="${group}" method="post" class="container">
         <input type="hidden" value="0" th:field="*{id}"/>
-        <label for="groupName">Название:</label>
-        <input type="text" id="groupName" th:field="*{name}">
-        <label for="series">Серия:</label>
-        <select id="series" th:field="*{series}">
-            <option th:each="series:${allSeries}" th:text="|${series.factory.name}: ${series.name}|" th:value="${series.id}">Завод</option>
-        </select>
-        <button type="submit">Создать новую группу</button>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="groupName">Название:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="groupName" th:field="*{name}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="series">Серия:</label>
+            </div>
+            <div class="col-8">
+                <select id="series" th:field="*{series}" class="w-100">
+                    <option th:each="series:${allSeries}" th:text="|${series.factory.name}: ${series.name}|"
+                            th:value="${series.id}">Завод
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4"></div>
+            <div class="col-8">
+                <button type="submit">Создать новую группу</button>
+            </div>
+        </div>
     </form>
 </div>
 </body>

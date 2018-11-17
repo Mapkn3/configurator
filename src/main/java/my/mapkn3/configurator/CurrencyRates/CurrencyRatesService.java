@@ -71,6 +71,8 @@ public class CurrencyRatesService {
             }
             conn.disconnect();
         } catch (IOException | ParserConfigurationException | SAXException ex) {
+            this.usd = BigDecimal.ONE;
+            this.eur = BigDecimal.ONE;
             ex.printStackTrace();
         }
     }

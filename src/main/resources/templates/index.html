@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <script src="/webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Конфигуратор</title>
     <!--<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
@@ -20,15 +21,15 @@
     <a href="newEntity.html" th:href="@{/new}">Создать</a>
 
     <div>
-        <span th:text="${'Курс валют ЦБ РФ на '+#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')+': '}">Дата</span>
-        <div th:text="${'1$ = '+currencyRateService.getUSD()+'₽; 1€ = '+currencyRateService.getEUR()+'₽'}">Курс валют
-        </div>
+        <div th:text="${'Курс валют ЦБ РФ на '+#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')+': '}">Дата</div>
+        <div th:text="${'1$ = '+currencyRateService.getUSD()+'₽ | 1€ = '+currencyRateService.getEUR()+'₽'}"
+           class="text-monospace text-success bg-dark d-inline-block py-1 px-2">Курс валют</div>
     </div>
 
     <div>
-        <table class="table table-bordered">
+        <table class="table table-sm table-bordered">
             <thead>
-            <tr>
+            <tr class="table-info">
                 <td>Модель</td>
                 <td>Наш артикул</td>
                 <td>Цена</td>
@@ -42,11 +43,9 @@
                 <td th:text="${item.article}">Артикул</td>
                 <td th:text="${item.cost+item.currency.symbol}">Цена</td>
                 <td>
-                    <button type="submit" th:form="${'add'+item.id}"><span class="glyphicon glyphicon-plus"></span>+
-                    </button>
+                    <button type="submit" th:form="${'add'+item.id}" class="btn-outline-success"><b>+</b></button>
                     <span th:text="${item.count}">Количество</span>
-                    <button type="submit" th:form="${'remove'+item.id}"><span class="glyphicon glyphicon-minus"></span>-
-                    </button>
+                    <button type="submit" th:form="${'remove'+item.id}" class="btn-outline-danger"><b>-</b></button>
                     <form th:action="@{'add/'+${item.id}}" method="post" th:id="${'add'+item.id}"></form>
                     <form th:action="@{'remove/'+${item.id}}" method="post" th:id="${'remove'+item.id}"></form>
                 </td>
@@ -61,13 +60,19 @@
                     Валюта
                 </option>
             </select>
-            <button type="submit">Рассчитать</button>
+            <button type="submit" class="btn-dark">Рассчитать</button>
         </form>
         <span th:text="${'Итого: '+commercialOffer.getTotalPrice()+commercialOffer.currency.symbol}">Итого</span>
     </div>
 
     <div>
-        <form th:action="@{/}" th:object="${filter}" method="post" id="main">
+        <form th:action="@{/sell}" method="post">
+            <button type="submit" class="btn-dark">Подтвердить</button>
+        </form>
+    </div>
+
+    <div>
+        <form th:action="@{/filter}" th:object="${filter}" method="get" id="main">
             <!--<label for="filter">Завод: </label>
             <select class="filter" id="filter" th:field="*{tfsgConfig}">
                 <option th:text="${'Все заводы > Все серии > Все группы'}" th:value="${'-1|-1|-1'}">фильтр</option>
@@ -109,14 +114,14 @@
                     </option>
                 </optgroup>
             </select>
-            <button type="submit" form="main">Отправить</button>
+            <button type="submit" form="main" class="btn-dark">Отправить</button>
         </form>
     </div>
 
     <div>
-        <table class="table table-hover table-striped table-bordered">
+        <table class="table table-sm table-hover table-bordered table-striped">
             <thead>
-            <tr>
+            <tr class="table-info">
                 <td></td>
                 <td>Серия</td>
                 <td>Группа</td>
@@ -133,7 +138,7 @@
             <tr th:each="item:${items}">
                 <td>
                     <form th:action="@{'/add/'+${item.id}}" method="post">
-                        <button type="submit"><span class="glyphicon glyphicon-plus"></span>+</button>
+                        <button type="submit" class="btn-info">+</button>
                     </form>
                 </td>
                 <td th:text="${item.series.name}">Серия</td>
@@ -142,7 +147,11 @@
                 <td th:text="${item.ourArticle}">Наш артикул</td>
                 <td th:text="${item.factoryArticle}">Артикул завода</td>
                 <td th:text="${item.cost+item.currency.symbol}">Цена</td>
-                <td th:text="${item.balance}">Остаток</td>
+                <td>
+                    <span th:text="${item.balance}">Остаток</span>
+                    <button type="submit" class="btn-outline-success" th:form="${'increment'+item.id}">+</button>
+                    <form th:action="@{'/increment/'+${item.id}}" method="post" th:id="${'increment'+item.id}"></form>
+                </td>
                 <td th:text="${item.comment}">Комментарий</td>
                 <td th:text="${item.description}">Описание</td>
             </tr>

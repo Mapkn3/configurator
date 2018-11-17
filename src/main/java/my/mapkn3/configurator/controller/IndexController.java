@@ -43,14 +43,12 @@ public class IndexController extends MainController {
         if (!model.containsAttribute("currencyRateService")) {
             model.addAttribute("currencyRateService", currencyRatesService);
         }
-        if (!model.containsAttribute("commercialOffer")) {
-            commercialOffer.setCurrency(currentCurrency);
-            model.addAttribute("commercialOffer", commercialOffer);
-        }
+        commercialOffer.setCurrency(currentCurrency);
+        model.addAttribute("commercialOffer", commercialOffer);
         return "index";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/filter", method = RequestMethod.GET)
     public String showItem(FilterConfig filter, ModelMap model) {
         List<ItemEntity> itemEntities;
         switch (filter.getCurrentFilter()) {
@@ -75,30 +73,57 @@ public class IndexController extends MainController {
         }
         model.addAttribute("filter", filter);
         model.addAttribute("items", itemEntities);
-        return showAll(model);
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/increment/{id}", method = RequestMethod.POST)
+    public String incrementItemEntityBalance(@PathVariable("id") long id) {
+        ItemEntity item = itemService.getById(id);
+        item.setBalance(item.getBalance() + 1);
+        itemService.updateItem(item);
+        return "redirect:/filter";
     }
 
     @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
     public String addItem(@PathVariable("id") long id) {
-        commercialOffer.addItem(itemService.getById(id));
-        return "redirect:/";
+        ItemEntity item = itemService.getById(id);
+        if (item.getBalance() > 0) {
+            item.setBalance(item.getBalance() - 1);
+            commercialOffer.addItem(itemService.updateItem(item));
+        }
+        return "redirect:/filter";
     }
 
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
     public String removeItem(@PathVariable("id") long id) {
+        ItemEntity item = itemService.getById(id);
+        item.setBalance(item.getBalance() + 1);
+        itemService.updateItem(item);
         commercialOffer.removeItemById(id);
-        return "redirect:/";
+        return "redirect:/filter";
     }
 
     @RequestMapping(value = "/recalculate", method = RequestMethod.POST)
     public String changeCurrencyForTotalPrice(CommercialOffer commercialOffer) {
         currentCurrency = commercialOffer.getCurrency();
-        return "redirect:/";
+        return "redirect:/filter";
+    }
+
+    @RequestMapping(value = "/sell", method = RequestMethod.POST)
+    public String sellAllItems(ModelMap model) {
+        commercialOffer.setCurrency(currentCurrency);
+        commercialOffer.getItems().clear();
+        return "redirect:/filter";
     }
 
     public static class FilterConfig {
         private CurrencyEntity currency;
         private String tfsgConfig;//type > factory > series > group
+
+        public FilterConfig() {
+            currency = null;
+            tfsgConfig = "ALL";
+        }
 
         public String getTfsgConfig() {
             return tfsgConfig;
