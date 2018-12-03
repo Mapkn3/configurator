@@ -21,9 +21,11 @@
     <a href="newEntity.html" th:href="@{/new}">Создать</a>
 
     <div>
-        <div th:text="${'Курс валют ЦБ РФ на '+#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')+': '}">Дата</div>
+        <div th:text="${'Курс валют ЦБ РФ на '+#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')+': '}">Дата
+        </div>
         <div th:text="${'1$ = '+currencyRateService.getUSD()+'₽ | 1€ = '+currencyRateService.getEUR()+'₽'}"
-           class="text-monospace text-success bg-dark d-inline-block py-1 px-2">Курс валют</div>
+             class="text-monospace text-success bg-dark d-inline-block py-1 px-2">Курс валют
+        </div>
     </div>
 
     <div>
@@ -53,22 +55,34 @@
             </tr>
             </tbody>
         </table>
-        <form th:action="@{/recalculate}" th:object="${commercialOffer}" method="post">
-            <label for="currencies">Рассчитать для:</label>
-            <select id="currencies" th:field="*{currency}">
-                <option th:each="currency:${allCurrencies}" th:text="${currency.name}" th:value="${currency.id}">
-                    Валюта
-                </option>
-            </select>
-            <button type="submit" class="btn-dark">Рассчитать</button>
-        </form>
-        <span th:text="${'Итого: '+commercialOffer.getTotalPrice()+commercialOffer.currency.symbol}">Итого</span>
-    </div>
-
-    <div>
-        <form th:action="@{/sell}" method="post">
-            <button type="submit" class="btn-dark">Подтвердить</button>
-        </form>
+        <div class="row">
+            <div class="col-1">
+                <form th:action="@{/sell}" method="post">
+                    <button type="submit" class="btn-dark">Подтвердить</button>
+                </form>
+            </div>
+            <div class="col-5"></div>
+            <div class="col-1">
+                <form th:action="@{/commercialOffer}" method="get">
+                    <button type="submit" class="btn-dark">DOCX</button>
+                </form>
+            </div>
+            <div class="col-3">
+                <form th:action="@{/recalculate}" th:object="${commercialOffer}" method="post">
+                    <label for="currencies">Рассчитать для:</label>
+                    <select id="currencies" th:field="*{currency}">
+                        <option th:each="currency:${allCurrencies}" th:text="${currency.name}"
+                                th:value="${currency.id}">
+                            Валюта
+                        </option>
+                    </select>
+                    <button type="submit" class="btn-dark">Рассчитать</button>
+                </form>
+            </div>
+            <div class="col-2">
+                <span th:text="${'Итого: '+commercialOffer.getTotalPrice()+commercialOffer.currency.symbol}">Итого</span>
+            </div>
+        </div>
     </div>
 
     <div>

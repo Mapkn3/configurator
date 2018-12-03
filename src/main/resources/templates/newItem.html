@@ -7,6 +7,7 @@
     <title>Новый товар</title>
 </head>
 <body>
+<a th:href="@{/new}">Назад</a>
 <div class="jumbotron">
     <form action="#" th:action="@{/new/item}" th:object="${item}" method="post" class="container">
         <input type="hidden" value="0" th:field="*{id}"/>

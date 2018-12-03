@@ -4,6 +4,7 @@ import my.mapkn3.configurator.CurrencyRates.CurrencyRatesService;
 import my.mapkn3.configurator.model.CommercialOffer;
 import my.mapkn3.configurator.model.CurrencyEntity;
 import my.mapkn3.configurator.model.ItemEntity;
+import my.mapkn3.configurator.view.MyDocxView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @SessionAttributes(types = {IndexController.FilterConfig.class, CurrencyRatesService.class}, names = "items")
@@ -114,6 +118,13 @@ public class IndexController extends MainController {
         commercialOffer.setCurrency(currentCurrency);
         commercialOffer.getItems().clear();
         return "redirect:/filter";
+    }
+
+    @RequestMapping(value = "/commercialOffer", method = RequestMethod.GET)
+    public ModelAndView generateCommercialOffer() {
+        Map<String, Object> model = new HashMap<>();
+        model.put("commercialOffer", commercialOffer);
+        return new ModelAndView(new MyDocxView(), model);
     }
 
     public static class FilterConfig {
