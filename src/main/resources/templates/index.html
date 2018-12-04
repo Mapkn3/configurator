@@ -6,18 +6,10 @@
     <script src="/webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Конфигуратор</title>
-    <!--<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-    <script th:src="@{/js/jquery.dependent-selects.js}"></script>
-    <script type="text/javascript">
-        $(function(){
-            $('.filter').dependentSelects({
-                labels: ['Серия: ', 'Группа: ']
-            });
-        })
-    </script>-->
 </head>
 <body>
 <div class="container-fluid">
+    <a href="/createDatabase" th:href="@{/createDatabase}">Загрузить тестовые данные</a>
     <a href="newEntity.html" th:href="@{/new}">Создать</a>
 
     <div>
