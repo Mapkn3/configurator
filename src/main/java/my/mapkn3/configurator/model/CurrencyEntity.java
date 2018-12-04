@@ -18,4 +18,12 @@ public class CurrencyEntity {
     @Basic
     @Column(name = "symbol", unique = true, nullable = false)
     private String symbol;
+
+    public CurrencyEntity() {}
+
+    public CurrencyEntity(String name, String symbol) {
+        this.id = 0;
+        this.name = name;
+        this.symbol = symbol;
+    }
 }
