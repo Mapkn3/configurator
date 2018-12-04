@@ -1,12 +1,14 @@
 package my.mapkn3.configurator.view;
 
 import my.mapkn3.configurator.model.CommercialOffer;
+import org.apache.poi.xwpf.usermodel.Document;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ public class MyDocxView extends AbstractDocxView {
         CommercialOffer commercialOffer = (CommercialOffer) model.get("commercialOffer");
 
         XWPFDocument document = new XWPFDocument();
+        document.addPictureData(new FileInputStream("images/logo.png"), Document.PICTURE_TYPE_PNG);
         XWPFTable table = document.createTable(1, 4);
         XWPFTableRow row = table.getRow(0);
         row.getCell(0).setText("Модель");
