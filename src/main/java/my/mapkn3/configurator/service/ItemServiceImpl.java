@@ -75,9 +75,11 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemEntity> getAllItems() {
         List<ItemEntity> items = itemRepository.findAll();
         log.info(String.format("Get %d items:", items.size()));
+        /*
         for (ItemEntity item : items) {
             log.info(String.format("%s", item.toString()));
         }
+        */
         return items;
     }
 

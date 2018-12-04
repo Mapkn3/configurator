@@ -50,9 +50,11 @@ public class GroupServiceImpl implements GroupService {
     public List<GroupEntity> getAllGroups() {
         List<GroupEntity> groups = groupRepository.findAll();
         log.info(String.format("Get %d groups:", groups.size()));
+        /*
         for (GroupEntity group : groups) {
             log.info(String.format("%s", group.toString()));
         }
+        */
         return groups;
     }
 

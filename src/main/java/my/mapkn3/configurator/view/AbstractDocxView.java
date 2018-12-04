@@ -14,7 +14,7 @@ public abstract class AbstractDocxView extends AbstractView {
     }
 
     private void initDocx() {
-        setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        setContentType("application/msword"); //setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
     }
 
     @Override

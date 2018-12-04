@@ -173,49 +173,12 @@ public class IndexController extends MainController {
             return Long.valueOf(params[1]);
         }
 
-        /*public Filter getFilter() {
-            List<Long> ids = Arrays.stream(tfsgConfig.split("\\|")).map(Long::valueOf).collect(Collectors.toList());
-            if (ids.get(0) == -1) {
-                if (ids.get(1) == -1) {
-                    if (ids.get(2) == -1) {
-                        return Filter.ALL;
-                    } else {
-                        return Filter.SERIES;
-                    }
-                } else {
-                    if (ids.get(2) == -1) {
-                        return Filter.GROUP;
-                    } else {
-                        return Filter.SERIES_GROUP;
-                    }
-                }
-            } else {
-                if (ids.get(1) == -1) {
-                    if (ids.get(2) == -1) {
-                        return Filter.FACTORY;
-                    } else {
-                        return Filter.FACTORY_GROUP;
-                    }
-                } else {
-                    if (ids.get(2) == -1) {
-                        return Filter.FACTORY_SERIES;
-                    } else {
-                        return Filter.FACTORY_SERIES_GROUP;
-                    }
-                }
-            }
-        }*/
-
         public enum Filter {
             ALL,
             TYPE,
             FACTORY,
             SERIES,
-            GROUP,
-            FACTORY_SERIES,
-            FACTORY_GROUP,
-            SERIES_GROUP,
-            FACTORY_SERIES_GROUP
+            GROUP
         }
     }
 }

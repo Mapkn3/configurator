@@ -40,9 +40,11 @@ public class FactoryServiceImpl implements FactoryService {
     public List<FactoryEntity> getAllFactories() {
         List<FactoryEntity> factories = factoryRepository.findAll();
         log.info(String.format("Get %d factories:", factories.size()));
+        /*
         for (FactoryEntity factory : factories) {
             log.info(String.format("%s", factory.toString()));
         }
+        */
         return factories;
     }
 

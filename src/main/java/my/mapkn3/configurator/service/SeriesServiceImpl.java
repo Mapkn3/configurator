@@ -46,9 +46,11 @@ public class SeriesServiceImpl implements SeriesService {
     public List<SeriesEntity> getAllSeries() {
         List<SeriesEntity> seriesEntities = seriesRepository.findAll();
         log.info(String.format("Get %d series:", seriesEntities.size()));
+        /*
         for (SeriesEntity series : seriesEntities) {
             log.info(String.format("%s", series.toString()));
         }
+        */
         return seriesEntities;
     }
 

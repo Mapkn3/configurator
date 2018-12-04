@@ -87,18 +87,6 @@
 
     <div>
         <form th:action="@{/filter}" th:object="${filter}" method="get" id="main">
-            <!--<label for="filter">Завод: </label>
-            <select class="filter" id="filter" th:field="*{tfsgConfig}">
-                <option th:text="${'Все заводы > Все серии > Все группы'}" th:value="${'-1|-1|-1'}">фильтр</option>
-                <option th:value="${''}"></option>
-                <option th:each="factory:${allFactories}" th:text="${factory.name}+' > Все серии > Все группы'" th:value="${factory.id}+'|-1|-1'">фильтр</option>
-                <option th:each="series:${allSeries}" th:text="'Все заводы > '+${series.name}+' > Все группы'" th:value="'-1|'+${series.id}+'|-1'">фильтр</option>
-                <option th:each="group:${allGroups}" th:text="'Все заводы > Все серии > '+${group.name}" th:value="'-1|-1|'+${group.id}">фильтр</option>
-                <option th:each="series:${allSeries}" th:text="${series.factory.name}+' > '+${series.name}+' > Все группы'" th:value="${series.factory.id}+'|'+${series.id}+'|-1'">фильтр</option>
-                <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > Все серии > '+${group.name}" th:value="${group.series.factory.id}+'|-1|'+${group.id}">фильтр</option>
-                <option th:each="group:${allGroups}" th:text="'Все заводы > '+${group.series.name}+' > '+${group.name}" th:value="'-1|'+${group.series.id}+'|'+${group.id}">фильтр</option>
-                <option th:each="group:${allGroups}" th:text="${group.series.factory.name}+' > '+${group.series.name}+' > '+${group.name}" th:value="${group.series.factory.id}+'|'+${group.series.id}+'|'+${group.id}">фильтр</option>
-            </select>-->
             <label for="filter">Фильтр</label>
             <select id="filter" th:field="*{tfsgConfig}">
                 <option th:text="${'Все'}" th:value="${'ALL'}">Все</option>

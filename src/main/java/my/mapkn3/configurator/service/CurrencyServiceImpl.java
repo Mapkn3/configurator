@@ -33,9 +33,11 @@ public class CurrencyServiceImpl implements CurrencyService {
     public List<CurrencyEntity> getAllCurrencies() {
         List<CurrencyEntity> currencies = currencyRepository.findAll();
         log.info(String.format("Get %d currencies:", currencies.size()));
+        /*
         for (CurrencyEntity currency : currencies) {
             log.info(String.format("%s", currency.toString()));
         }
+        */
         return currencies;
     }
 

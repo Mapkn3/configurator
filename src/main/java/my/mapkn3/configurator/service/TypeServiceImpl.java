@@ -33,9 +33,11 @@ public class TypeServiceImpl implements TypeService {
     public List<TypeEntity> getAllTypes() {
         List<TypeEntity> types = typeRepository.findAll();
         log.info(String.format("Get %d types:", types.size()));
+        /*
         for (TypeEntity type : types) {
             log.info(String.format("%s", type.toString()));
         }
+        */
         return types;
     }
 
