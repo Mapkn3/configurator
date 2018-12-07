@@ -3,6 +3,8 @@ before_install:
   - chmod +x mvnw
 services:
   - postgresql
+addons:
+  postgresql: "42.2.5"
 deploy:
   provider: heroku
   api_key:
