@@ -111,7 +111,8 @@ public class IndexController extends MainController {
 
     @RequestMapping(value = "/recalculate", method = RequestMethod.POST)
     public String changeCurrencyForTotalPrice(CommercialOffer commercialOffer) {
-        currentCurrency = commercialOffer.getCurrency();
+        this.currentCurrency = commercialOffer.getCurrency();
+        this.commercialOffer.setCurrency(this.currentCurrency);
         return "redirect:/filter";
     }
 
