@@ -17,21 +17,13 @@ public interface ItemService {
 
     List<ItemEntity> getAllByGroup(GroupEntity group);
 
-    List<ItemEntity> getAllByFactoryAndSeriesAndGroup(FactoryEntity factory, SeriesEntity series, GroupEntity group);
+    ItemEntity getItemById(long id);
 
-    List<ItemEntity> getAllByFactoryAndSeries(FactoryEntity factory, SeriesEntity series);
+    ItemEntity getItemByModel(String model);
 
-    List<ItemEntity> getAllByFactoryAndGroup(FactoryEntity factory, GroupEntity group);
+    ItemEntity getItemByOurArticle(String ourArticle);
 
-    List<ItemEntity> getAllBySeriesAndGroup(SeriesEntity series, GroupEntity group);
-
-    ItemEntity getById(long id);
-
-    ItemEntity getByModel(String model);
-
-    ItemEntity getByOurArticle(String ourArticle);
-
-    ItemEntity getByFactoryArticle(String factoryArticle);
+    ItemEntity getItemByFactoryArticle(String factoryArticle);
 
     ItemEntity addItem(ItemEntity item);
 

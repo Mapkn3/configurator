@@ -7,7 +7,7 @@
     <title>Новый товар</title>
 </head>
 <body>
-<a th:href="@{/new}">Назад</a>
+<a th:href="@{/new}" class="navbar-brand">Назад</a>
 <div class="jumbotron">
     <form action="#" th:action="@{/new/item}" th:object="${item}" method="post" class="container">
         <input type="hidden" value="0" th:field="*{id}"/>
@@ -63,24 +63,6 @@
                 <input type="text" id="itemCost" th:field="*{cost}" class="w-100">
             </div>
         </div>
-        <!--
-        <label for="itemEup">EUP:</label>
-        <input type="text" id="itemEup" th:field="*{eup}">
-        <label for="itemDdp0">DDP0:</label>
-        <input type="text" id="itemDdp0" th:field="*{ddp0}">
-        <label for="itemDdp1">DDP1:</label>
-        <input type="text" id="itemDdp1" th:field="*{ddp1}">
-        <label for="itemDdp2">DDP2:</label>
-        <input type="text" id="itemDdp2" th:field="*{ddp2}">
-        <label for="itemDdp3">DDP3:</label>
-        <input type="text" id="itemDdp3" th:field="*{ddp3}">
-        <label for="itemDdp4">DDP4:</label>
-        <input type="text" id="itemDdp4" th:field="*{ddp4}">
-        <label for="itemDdp1min">DDP1min:</label>
-        <input type="text" id="itemDdp1min" th:field="*{ddp1min}">
-        <label for="itemExw">EXW:</label>
-        <input type="text" id="itemExw" th:field="*{exw}">
-        -->
         <div class="form-row">
             <div class="col-4 text-right">
                 <label for="itemBalance">Остаток:</label>

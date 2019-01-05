@@ -1,10 +1,13 @@
 package my.mapkn3.configurator.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Data
+@ToString(exclude = {"items"})
 @Entity
 @Table(name = "group_table")
 public class GroupEntity {
@@ -18,6 +21,8 @@ public class GroupEntity {
     @ManyToOne
     @JoinColumn(name = "series_id", referencedColumnName = "id", nullable = false)
     private SeriesEntity series;
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE)
+    private Collection<ItemEntity> items;
 
     public GroupEntity() {}
 

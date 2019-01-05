@@ -33,7 +33,9 @@ public class IndexController extends MainController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showAll(ModelMap model) {
-        currencyRatesService.updateCurrencyRates();
+        if (currencyRatesService.getUSD() == null || currencyRatesService.getEUR() == null) {
+            currencyRatesService.updateCurrencyRates();
+        }
         if (commercialOffer == null) {
             currentCurrency = currencyService.getCurrencyByName("RUR");
             commercialOffer = new CommercialOffer(currencyRatesService, currentCurrency);
@@ -82,7 +84,7 @@ public class IndexController extends MainController {
 
     @RequestMapping(value = "/increment/{id}", method = RequestMethod.POST)
     public String incrementItemEntityBalance(@PathVariable("id") long id) {
-        ItemEntity item = itemService.getById(id);
+        ItemEntity item = itemService.getItemById(id);
         item.setBalance(item.getBalance() + 1);
         itemService.updateItem(item);
         return "redirect:/filter";
@@ -90,7 +92,7 @@ public class IndexController extends MainController {
 
     @RequestMapping(value = "/add/{id}", method = RequestMethod.POST)
     public String addItem(@PathVariable("id") long id) {
-        ItemEntity item = itemService.getById(id);
+        ItemEntity item = itemService.getItemById(id);
         if (item.getBalance() > 0) {
             item.setBalance(item.getBalance() - 1);
             commercialOffer.addItem(itemService.updateItem(item));
@@ -100,7 +102,7 @@ public class IndexController extends MainController {
 
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
     public String removeItem(@PathVariable("id") long id) {
-        ItemEntity item = itemService.getById(id);
+        ItemEntity item = itemService.getItemById(id);
         item.setBalance(item.getBalance() + 1);
         itemService.updateItem(item);
         commercialOffer.removeItemById(id);
@@ -125,6 +127,24 @@ public class IndexController extends MainController {
         Map<String, Object> model = new HashMap<>();
         model.put("commercialOffer", commercialOffer);
         return new ModelAndView(new MyDocxView(), model);
+    }
+
+    @RequestMapping(value = "/discount", params = {"plus"}, method = RequestMethod.POST)
+    public String calculateDiscountPlus(CommercialOffer commercialOffer) {
+        if (commercialOffer.getDiscount().signum() == -1) {
+            commercialOffer.toggleDiscount();
+        }
+        this.commercialOffer.setDiscount(commercialOffer.getDiscount());
+        return "redirect:/filter";
+    }
+
+    @RequestMapping(value = "/discount", params = {"minus"}, method = RequestMethod.POST)
+    public String calculateDiscountMinus(CommercialOffer commercialOffer) {
+        if (commercialOffer.getDiscount().signum() == 1) {
+            commercialOffer.toggleDiscount();
+        }
+        this.commercialOffer.setDiscount(commercialOffer.getDiscount());
+        return "redirect:/filter";
     }
 
     public static class FilterConfig {

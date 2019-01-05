@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Редактировать товар</title>
+</head>
+<body>
+<a th:href="@{/edit}" class="navbar-brand">Назад</a>
+<div class="jumbotron">
+    <form action="#" th:action="@{'/edit/item/'+${item.id}}" th:object="${item}" method="post" class="container">
+        <input type="hidden" value="0" th:field="*{id}"/>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemUrl">Ссылка:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="itemUrl" th:field="*{url}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemModel">Модель:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="itemModel" th:field="*{model}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemOurArticle">Внутренний артикул:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="itemOurArticle" th:field="*{ourArticle}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemFactoryArticle">Артикул завода:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="itemFactoryArticle" th:field="*{factoryArticle}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="currency">Валюта:</label>
+            </div>
+            <div class="col-8">
+                <select id="currency" th:field="*{currency}" class="w-100">
+                    <option th:each="currecny:${allCurrencies}" th:text="${currecny.name+' ('+currecny.symbol+')'}"
+                            th:value="${currecny.id}">Валюта
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemCost">Цена:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="itemCost" th:field="*{cost}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemBalance">Остаток:</label>
+            </div>
+            <div class="col-8">
+                <input type="number" id="itemBalance" min="0" th:field="*{balance}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemDescription">Описание:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="itemDescription" th:field="*{description}" class="w-100">
+            </div>
+        </div>
+        <!--
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemPathToPhoto">Путь к фото:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="itemPathToPhoto" th:field="*{pathToPhoto}" class="w-100">
+            </div>
+        </div>
+        -->
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="itemComment">Комментарий:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="itemComment" th:field="*{comment}" class="w-100">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="factories">Группа:</label>
+            </div>
+            <div class="col-8">
+                <select id="factories" th:field="*{group}" class="w-100">
+                    <option th:each="group:${allGroups}"
+                            th:text="${'['+group.series.factory.type.name+'] '+group.series.factory.name+' | '+group.series.name+': '+group.name}"
+                            th:value="${group.id}">Группа
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4"></div>
+            <div class="col-8">
+                <button type="submit">Изменить тип</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

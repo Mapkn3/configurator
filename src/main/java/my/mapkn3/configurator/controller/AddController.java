@@ -22,13 +22,13 @@ public class AddController extends MainController {
     @RequestMapping(value = "/new/type", method = RequestMethod.GET)
     public String newType(final TypeEntity typeEntity, final ModelMap model) {
         model.addAttribute("type", typeEntity);
-        return "newType";
+        return "new/newType";
     }
 
     @RequestMapping(value = "/new/type", method = RequestMethod.POST)
     public String saveType(final TypeEntity typeEntity, final BindingResult bindingResult, final ModelMap model) {
         if (bindingResult.hasErrors()) {
-            return "newType";
+            return "new/newType";
         }
         typeService.addType(typeEntity);
         model.clear();
@@ -38,13 +38,13 @@ public class AddController extends MainController {
     @RequestMapping(value = "/new/factory", method = RequestMethod.GET)
     public String newFactory(final FactoryEntity factoryEntity, final ModelMap model) {
         model.addAttribute("factory", factoryEntity);
-        return "newFactory";
+        return "new/newFactory";
     }
 
     @RequestMapping(value = "/new/factory", method = RequestMethod.POST)
     public String saveFactory(final FactoryEntity factoryEntity, final BindingResult bindingResult, final ModelMap model) {
         if (bindingResult.hasErrors()) {
-            return "newFactory";
+            return "new/newFactory";
         }
         factoryService.addFactory(factoryEntity);
         model.clear();
@@ -54,13 +54,13 @@ public class AddController extends MainController {
     @RequestMapping(value = "/new/series", method = RequestMethod.GET)
     public String newSeries(final SeriesEntity seriesEntity, final ModelMap model) {
         model.addAttribute("series", seriesEntity);
-        return "newSeries";
+        return "new/newSeries";
     }
 
     @RequestMapping(value = "/new/series", method = RequestMethod.POST)
     public String saveSeries(final SeriesEntity seriesEntity, final BindingResult bindingResult, final ModelMap model) {
         if (bindingResult.hasErrors()) {
-            return "newSeries";
+            return "new/newSeries";
         }
         SeriesEntity newSeries = seriesService.addSeries(seriesEntity);
         groupService.addGroup(new GroupEntity("Без группы", newSeries));
@@ -71,13 +71,13 @@ public class AddController extends MainController {
     @RequestMapping(value = "/new/group", method = RequestMethod.GET)
     public String newGroup(final GroupEntity groupEntity, final ModelMap model) {
         model.addAttribute("group", groupEntity);
-        return "newGroup";
+        return "new/newGroup";
     }
 
     @RequestMapping(value = "/new/group", method = RequestMethod.POST)
     public String saveGroup(final GroupEntity groupEntity, final BindingResult bindingResult, final ModelMap model) {
         if (bindingResult.hasErrors()) {
-            return "newGroup";
+            return "new/newGroup";
         }
         groupService.addGroup(groupEntity);
         model.clear();
@@ -87,25 +87,15 @@ public class AddController extends MainController {
     @RequestMapping(value = "/new/item", method = RequestMethod.GET)
     public String newItem(final ItemEntity itemEntity, final ModelMap model) {
         model.addAttribute("item", itemEntity);
-        return "newItem";
+        return "new/newItem";
     }
 
     @RequestMapping(value = "/new/item", method = RequestMethod.POST)
     public String saveItem(final ItemEntity itemEntity, final BindingResult bindingResult, final ModelMap model) {
         if (bindingResult.hasErrors()) {
-            return "newItem";
+            return "new/newItem";
         }
         itemEntity.setPathToPhoto("");
-
-        itemEntity.setEup(itemEntity.getCost().multiply(BigDecimal.valueOf(1.7)));
-        itemEntity.setDdp0(itemEntity.getCost().multiply(BigDecimal.valueOf(1.1)));
-        itemEntity.setDdp1(itemEntity.getCost().multiply(BigDecimal.valueOf(1.2)));
-        itemEntity.setDdp2(itemEntity.getCost().multiply(BigDecimal.valueOf(1.3)));
-        itemEntity.setDdp3(itemEntity.getCost().multiply(BigDecimal.valueOf(1.4)));
-        itemEntity.setDdp4(itemEntity.getCost().multiply(BigDecimal.valueOf(1.5)));
-        itemEntity.setDdp1min(itemEntity.getCost().multiply(BigDecimal.valueOf(1.05)));
-        itemEntity.setExw(itemEntity.getCost().multiply(BigDecimal.valueOf(2)));
-
         itemEntity.setSeries(itemEntity.getGroup().getSeries());
         itemEntity.setFactory(itemEntity.getSeries().getFactory());
         itemEntity.setType(itemEntity.getFactory().getType());

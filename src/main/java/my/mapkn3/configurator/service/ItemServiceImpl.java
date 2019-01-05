@@ -50,14 +50,6 @@ public class ItemServiceImpl implements ItemService {
         defaultItem.setOurArticle("");
         defaultItem.setFactoryArticle("");
         defaultItem.setCost(BigDecimal.ZERO);
-        defaultItem.setEup(BigDecimal.ZERO);
-        defaultItem.setDdp0(BigDecimal.ZERO);
-        defaultItem.setDdp1(BigDecimal.ZERO);
-        defaultItem.setDdp2(BigDecimal.ZERO);
-        defaultItem.setDdp3(BigDecimal.ZERO);
-        defaultItem.setDdp4(BigDecimal.ZERO);
-        defaultItem.setDdp1min(BigDecimal.ZERO);
-        defaultItem.setExw(BigDecimal.ZERO);
         defaultItem.setBalance(0);
         defaultItem.setDescription("");
         defaultItem.setPathToPhoto("");
@@ -124,48 +116,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemEntity> getAllByFactoryAndSeriesAndGroup(FactoryEntity factory, SeriesEntity series, GroupEntity group) {
-        List<ItemEntity> items = itemRepository.findAllByFactoryAndSeriesAndGroup(factory, series, group);
-        log.info(String.format("Get %d items for factory, series and group:%n%s%n%s%n%s", items.size(),
-                factory.toString(), series.toString(), group.toString()));
-        for (ItemEntity item : items) {
-            log.info(String.format("%s", item.toString()));
-        }
-        return items;
-    }
-
-    @Override
-    public List<ItemEntity> getAllByFactoryAndSeries(FactoryEntity factory, SeriesEntity series) {
-        List<ItemEntity> items = itemRepository.findAllByFactoryAndSeries(factory, series);
-        log.info(String.format("Get %d items for factory and series:%n%s%n%s", items.size(), factory.toString(), series.toString()));
-        for (ItemEntity item : items) {
-            log.info(String.format("%s", item.toString()));
-        }
-        return items;
-    }
-
-    @Override
-    public List<ItemEntity> getAllByFactoryAndGroup(FactoryEntity factory, GroupEntity group) {
-        List<ItemEntity> items = itemRepository.findAllByFactoryAndGroup(factory, group);
-        log.info(String.format("Get %d items for factory and group:%n%s%n%s", items.size(), factory.toString(), group.toString()));
-        for (ItemEntity item : items) {
-            log.info(String.format("%s", item.toString()));
-        }
-        return items;
-    }
-
-    @Override
-    public List<ItemEntity> getAllBySeriesAndGroup(SeriesEntity series, GroupEntity group) {
-        List<ItemEntity> items = itemRepository.findAllBySeriesAndGroup(series, group);
-        log.info(String.format("Get %d items for series and group:%n%s%n%s", items.size(), series.toString(), group.toString()));
-        for (ItemEntity item : items) {
-            log.info(String.format("%s", item.toString()));
-        }
-        return items;
-    }
-
-    @Override
-    public ItemEntity getById(long id) {
+    public ItemEntity getItemById(long id) {
         log.info(String.format("Getting item with id = %d", id));
         ItemEntity item = itemRepository.findById(id).orElse(getDefaultItem());
         if (item.equals(getDefaultItem())) {
@@ -175,7 +126,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemEntity getByModel(String model) {
+    public ItemEntity getItemByModel(String model) {
         log.info(String.format("Getting item with model = %s", model));
         ItemEntity item = itemRepository.findByModel(model).orElse(getDefaultItem());
         if (item.equals(getDefaultItem())) {
@@ -185,7 +136,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemEntity getByOurArticle(String ourArticle) {
+    public ItemEntity getItemByOurArticle(String ourArticle) {
         log.info(String.format("Getting item with our article = %s", ourArticle));
         ItemEntity item = itemRepository.findByOurArticle(ourArticle).orElse(getDefaultItem());
         if (item.equals(getDefaultItem())) {
@@ -195,7 +146,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemEntity getByFactoryArticle(String factoryArticle) {
+    public ItemEntity getItemByFactoryArticle(String factoryArticle) {
         log.info(String.format("Getting item with factory article = %s", factoryArticle));
         ItemEntity item = itemRepository.findByFactoryArticle(factoryArticle).orElse(getDefaultItem());
         if (item.equals(getDefaultItem())) {

@@ -29,30 +29,6 @@ public class ItemEntity {
     @Column(name = "cost")
     private BigDecimal cost;
     @Basic
-    @Column(name = "eup")
-    private BigDecimal eup;
-    @Basic
-    @Column(name = "ddp0")
-    private BigDecimal ddp0;
-    @Basic
-    @Column(name = "ddp1")
-    private BigDecimal ddp1;
-    @Basic
-    @Column(name = "ddp2")
-    private BigDecimal ddp2;
-    @Basic
-    @Column(name = "ddp3")
-    private BigDecimal ddp3;
-    @Basic
-    @Column(name = "ddp4")
-    private BigDecimal ddp4;
-    @Basic
-    @Column(name = "ddp1min")
-    private BigDecimal ddp1min;
-    @Basic
-    @Column(name = "exw")
-    private BigDecimal exw;
-    @Basic
     @Column(name = "balance")
     private long balance;
     @Basic
@@ -94,16 +70,6 @@ public class ItemEntity {
         this.comment = comment;
         this.currency = currency;
         this.group = group;
-
-        this.eup = cost.multiply(BigDecimal.valueOf(1.7));
-        this.ddp0 = cost.multiply(BigDecimal.valueOf(1.1));
-        this.ddp1 = cost.multiply(BigDecimal.valueOf(1.2));
-        this.ddp2 = cost.multiply(BigDecimal.valueOf(1.3));
-        this.ddp3 = cost.multiply(BigDecimal.valueOf(1.4));
-        this.ddp4 = cost.multiply(BigDecimal.valueOf(1.5));
-        this.ddp1min = cost.multiply(BigDecimal.valueOf(1.05));
-        this.exw = cost.multiply(BigDecimal.valueOf(2));
-
         this.series = this.group.getSeries();
         this.factory = this.series.getFactory();
         this.type = this.factory.getType();

@@ -7,7 +7,7 @@
     <title>Новая серия</title>
 </head>
 <body>
-<a th:href="@{/new}">Назад</a>
+<a th:href="@{/new}" class="navbar-brand">Назад</a>
 <div class="jumbotron">
     <form action="#" th:action="@{/new/series}" th:object="${series}" method="post" class="container">
         <input type="hidden" value="0" th:field="*{id}"/>

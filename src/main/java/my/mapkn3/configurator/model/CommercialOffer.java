@@ -11,11 +11,13 @@ import java.util.stream.Collectors;
 public class CommercialOffer {
     private CurrencyRatesService currencyRatesService;
     private CurrencyEntity currency;
+    private BigDecimal discount;
     private List<Item> items;
 
     public CommercialOffer(CurrencyRatesService currencyRatesService, CurrencyEntity currency) {
         this.currencyRatesService = currencyRatesService;
         this.currency = currency;
+        this.discount = BigDecimal.ZERO;
         this.items = new ArrayList<>();
     }
 
@@ -35,6 +37,18 @@ public class CommercialOffer {
         this.currency = currency;
     }
 
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
+    }
+
+    public void toggleDiscount() {
+        this.discount = this.discount.negate();
+    }
+
     public List<Item> getItems() {
         return items;
     }
@@ -45,6 +59,7 @@ public class CommercialOffer {
 
     public void addItem(ItemEntity itemEntity) {
         Item item = new Item(itemEntity);
+        updateCostForCurrentCurrency(item);
         for (Item i : items) {
             if (i.getId() == item.getId()) {
                 i.setCount(i.getCount() + 1);
@@ -63,8 +78,43 @@ public class CommercialOffer {
         items = items.stream().filter(item -> item.count > 0).collect(Collectors.toList());
     }
 
+    public BigDecimal getCurrencyRateForCurrency(CurrencyEntity currency) {
+        BigDecimal currencyRate = BigDecimal.ONE;
+        if (currency.getName().equals("EUR")) {
+            currencyRate = currencyRatesService.getEUR();
+        }
+        if (currency.getName().equals("USD")) {
+            currencyRate = currencyRatesService.getUSD();
+        }
+        return currencyRate;
+    }
+
+    public BigDecimal getCostForCurrency(CurrencyEntity oldCurrency, CurrencyEntity newCurrency, BigDecimal cost) {
+        BigDecimal multiplier = getCurrencyRateForCurrency(oldCurrency);
+        BigDecimal divider = getCurrencyRateForCurrency(newCurrency);
+        return cost.multiply(multiplier).divide(divider, 6, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public void updateCostForCurrentCurrency(Item item) {
+        item.setCostForCurrentCurrency(getCostForCurrency(item.getCurrency(), currency, item.getCost()));
+    }
+
+    public void updateCostForCurrentCurrencyForAllItems() {
+        for (Item item : items) {
+            updateCostForCurrentCurrency(item);
+        }
+    }
+
     public BigDecimal getTotalPrice() {
-        return items.stream()
+        updateCostForCurrentCurrencyForAllItems();
+        BigDecimal price = items.stream()
+                .map(item -> item.getCostForCurrentCurrency().multiply(BigDecimal.valueOf(item.count)))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+        BigDecimal discountNormalize = discount.divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP);
+        BigDecimal discountValue = price.multiply(discountNormalize);
+        BigDecimal totalPrice = price.add(discountValue);
+        return totalPrice.setScale(2, RoundingMode.HALF_UP);
+        /*return items.stream()
                 .map(item -> item.getCurrency().getName().equals("EUR") ?
                         item.getCost().multiply(currencyRatesService.getEUR()).multiply(BigDecimal.valueOf(item.count)) :
                         item.getCurrency().getName().equals("USD") ?
@@ -75,7 +125,7 @@ public class CommercialOffer {
                         currency.getName().equals("USD") ?
                                 cost.divide(currencyRatesService.getUSD(), 6, RoundingMode.HALF_UP) :
                                 cost)
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);*/
     }
 
     public static class Item {
@@ -87,6 +137,7 @@ public class CommercialOffer {
         private String description;
         private String url;
         private long count;
+        private BigDecimal costForCurrentCurrency;
 
         public Item() {
         }
@@ -100,6 +151,7 @@ public class CommercialOffer {
             this.description = item.getDescription();
             this.url = item.getUrl();
             this.count = 1;
+            this.costForCurrentCurrency = item.getCost();
         }
 
         public long getId() {
@@ -164,6 +216,14 @@ public class CommercialOffer {
 
         public void setCount(long count) {
             this.count = count;
+        }
+
+        public BigDecimal getCostForCurrentCurrency() {
+            return costForCurrentCurrency;
+        }
+
+        public void setCostForCurrentCurrency(BigDecimal costForCurrentCurrency) {
+            this.costForCurrentCurrency = costForCurrentCurrency;
         }
     }
 }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <script src="/webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Редактировать сущность</title>
+</head>
+<body>
+<div class="container">
+    <div>
+        <a href="index.html" th:href="@{/}" class="navbar-brand">На главную</a>
+    </div>
+    <div>
+        <ul class="list-group">
+            <li th:each="type:${allTypes}" class="list-group-item">
+                <span th:text="${type.name}">тип</span>
+                <span>
+                    <a th:href="@{'/edit/type/'+${type.id}}">Редактировать</a>
+                    <a th:if="${#lists.isEmpty(type.factories)}" th:href="@{'/delete/type/'+${type.id}}">Удалить</a>
+                </span>
+                <ul class="list-group">
+                    <li th:each="factory:${type.factories}" class="list-group-item">
+                        <span th:text="${factory.name}">завод</span>
+                        <span>
+                            <a th:href="@{'/edit/factory/'+${factory.id}}">Редактировать</a>
+                            <a th:if="${#lists.isEmpty(factory.series)}" th:href="@{'/delete/factory/'+${factory.id}}">Удалить</a>
+                        </span>
+                        <ul class="list-group">
+                            <li th:each="series:${factory.series}" class="list-group-item">
+                                <span th:text="${series.name}">серия</span>
+                                <span>
+                                    <a th:href="@{'/edit/series/'+${series.id}}">Редактировать</a>
+                                    <a th:if="${#lists.isEmpty(series.groups) or #lists.size(series.groups) == 1}" th:href="@{'/delete/series/'+${series.id}}">Удалить</a>
+                                </span>
+                                <ul class="list-group">
+                                    <li th:each="group:${series.groups}" class="list-group-item" th:unless="${group.name.equals('Без группы')}">
+                                        <span th:text="${group.name}">группа</span>
+                                        <span th:unless="${group.name.equals('Без группы')}">
+                                            <a th:href="@{'/edit/group/'+${group.id}}">Редактировать</a>
+                                            <a th:if="${#lists.isEmpty(group.items)}" th:href="@{'/delete/group/'+${group.id}}">Удалить</a>
+                                        </span>
+                                        <ul class="list-group">
+                                            <li th:each="item:${group.items}" class="list-group-item">
+                                                <span th:text="${item.model+' ('+item.ourArticle+')'}">товар</span>
+                                                <span>
+                                                    <a th:href="@{'/edit/item/'+${item.id}}">Редактировать</a>
+                                                    <a th:href="@{'/delete/item/'+${item.id}}">Удалить</a>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

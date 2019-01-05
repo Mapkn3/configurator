@@ -50,4 +50,9 @@ public class MainController {
     public List<GroupEntity> allGroups() {
         return groupService.getAllGroups();
     }
+
+    @ModelAttribute("allItems")
+    public List<ItemEntity> allItems() {
+        return itemService.getAllItems();
+    }
 }

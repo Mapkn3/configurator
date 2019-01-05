@@ -11,20 +11,20 @@
     <div>
         <a href="index.html" th:href="@{/}" class="navbar-brand">На главную</a>
     </div>
-    <div>
-        <a href="newType.html" th:href="@{/new/type}" class="nav-link">Добавить тип</a>
+    <div class="navbar">
+        <a href="new/newType.html" th:href="@{/new/type}" class="navbar-text">Добавить тип</a>
     </div>
-    <div th:unless="${#lists.isEmpty(allTypes)}">
-        <a href="newFactory.html" th:href="@{/new/factory}" class="nav-link">Добавить завод</a>
+    <div class="navbar" th:unless="${#lists.isEmpty(allTypes)}">
+        <a href="new/newFactory.html" th:href="@{/new/factory}" class="navbar-text">Добавить завод</a>
     </div>
-    <div th:unless="${#lists.isEmpty(allFactories)}">
-        <a href="newSeries.html" th:href="@{/new/series}" class="nav-link">Добавить серию</a>
+    <div class="navbar" th:unless="${#lists.isEmpty(allFactories)}">
+        <a href="new/newSeries.html" th:href="@{/new/series}" class="navbar-text">Добавить серию</a>
     </div>
-    <div th:unless="${#lists.isEmpty(allFactories)}">
-        <a href="newGroup.html" th:href="@{/new/group}" class="nav-link">Добавить группу</a>
+    <div class="navbar" th:unless="${#lists.isEmpty(allSeries)}">
+        <a href="new/newGroup.html" th:href="@{/new/group}" class="navbar-text">Добавить группу</a>
     </div>
-    <div th:unless="${#lists.isEmpty(allTypes) or #lists.isEmpty(allFactories) or #lists.isEmpty(allSeries) or #lists.isEmpty(allGroups)}">
-        <a href="newItem.html" th:href="@{/new/item}" class="nav-link">Добавить продукт</a>
+    <div class="navbar" th:unless="${#lists.isEmpty(allGroups)}">
+        <a href="new/newItem.html" th:href="@{/new/item}" class="navbar-text">Добавить продукт</a>
     </div>
 </div>
 </body>

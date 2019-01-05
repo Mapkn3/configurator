@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Редактировать тип</title>
+</head>
+<body>
+<a th:href="@{/edit}" class="navbar-brand">Назад</a>
+<div class="jumbotron">
+    <form action="#" th:action="@{'/edit/type/'+${type.id}}" th:object="${type}" method="post" class="container">
+        <input type="hidden" value="0" th:field="*{id}"/>
+        <div class="form-row">
+            <div class="col-4 text-right">
+                <label for="typeName">Название:</label>
+            </div>
+            <div class="col-8">
+                <input type="text" id="typeName" th:field="*{name}" class="w-100"/>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-4"></div>
+            <div class="col-8">
+                <button type="submit">Изменить тип</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package my.mapkn3.configurator.CurrencyRates;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
+@Slf4j
 @Service
 public class CurrencyRatesService {
     private BigDecimal usd = null;
@@ -61,19 +62,17 @@ public class CurrencyRatesService {
                     if (getElementValue(element, "CharCode").equals("EUR")) {
                         this.eur = new BigDecimal(getElementValue(element, "Value").replace(',', '.'));
                     }
-                    /*
-                    System.out.println(getElementValue(element, "NumCode") + ", "
+                    log.info(getElementValue(element, "NumCode") + ", "
                             + getElementValue(element, "CharCode") + ", "
                             + getElementValue(element, "Name") + ", "
                             + getElementValue(element, "Value"));
-                    */
                 }
             }
             conn.disconnect();
         } catch (IOException | ParserConfigurationException | SAXException ex) {
             this.usd = BigDecimal.ONE;
             this.eur = BigDecimal.ONE;
-            ex.printStackTrace();
+            log.error(ex.getMessage());
         }
     }
 
