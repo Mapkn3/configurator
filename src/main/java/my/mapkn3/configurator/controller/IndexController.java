@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,17 +25,16 @@ public class IndexController extends MainController {
     private final CurrencyRatesService currencyRatesService;
     private CurrencyEntity currentCurrency;
     private CommercialOffer commercialOffer = null;
-    private Date delay = new Date();
 
     @Autowired
     public IndexController(CurrencyRatesService currencyRatesService) {
         this.currencyRatesService = currencyRatesService;
-        currencyRatesService.updateCurrencyRates();
+        currencyRatesService.updateCurrencyRates(false);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showAll(ModelMap model) {
-        currencyRatesService.updateCurrencyRates();
+        currencyRatesService.updateCurrencyRates(false);
         if (commercialOffer == null) {
             currentCurrency = currencyService.getCurrencyByName("RUR");
             commercialOffer = new CommercialOffer(currencyRatesService, currentCurrency);

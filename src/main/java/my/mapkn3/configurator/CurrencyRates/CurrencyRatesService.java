@@ -28,19 +28,19 @@ public class CurrencyRatesService {
 
     public CurrencyRatesService() {
         this.time = new Date();
-        updateCurrencyRates();
+        updateCurrencyRates(true);
     }
 
     public BigDecimal getUSD() {
         if (this.usd == null) {
-            updateCurrencyRates();
+            updateCurrencyRates(true);
         }
         return this.usd;
     }
 
     public BigDecimal getEUR() {
         if (this.eur == null) {
-            updateCurrencyRates();
+            updateCurrencyRates(true);
         }
         return this.eur;
     }
@@ -49,9 +49,9 @@ public class CurrencyRatesService {
         return time;
     }
 
-    public void updateCurrencyRates() {
+    public void updateCurrencyRates(boolean isForce) {
         Date now = new Date();
-        if ((now.getTime() - time.getTime()) > TimeUnit.HOURS.toMillis(1)) {
+        if (isForce || ((now.getTime() - time.getTime()) > TimeUnit.HOURS.toMillis(1))) {
             time = now;
             String addr = "http://www.cbr.ru/scripts/XML_daily.asp";
             try {
