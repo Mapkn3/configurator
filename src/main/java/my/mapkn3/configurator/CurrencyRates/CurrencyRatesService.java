@@ -28,6 +28,7 @@ public class CurrencyRatesService {
 
     public CurrencyRatesService() {
         this.time = new Date();
+        updateCurrencyRates();
     }
 
     public BigDecimal getUSD() {
