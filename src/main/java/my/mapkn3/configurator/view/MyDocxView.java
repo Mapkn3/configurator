@@ -7,7 +7,6 @@ import org.apache.poi.xwpf.usermodel.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -32,7 +31,6 @@ public class MyDocxView extends AbstractDocxView {
         info.setText("ООО \"Эн-Пауэр\", Россия, Москва, 117513, ул. Островитянова, 4, офис 1; E-Mail: sales@n-power.ru \n" +
                 "Москва: +7 (495) 740-30-85, (495) 956-19-19; Н.Новгород: +7 (831) 462-16-41\n" +
                 "Казань: +7 (987) 290-64-05; Ростов-на-Дону: +7 (863) 298-11-93\n");
-        info.setColor(String.valueOf(Color.gray.getRGB()));
 
         XWPFTable table = document.createTable(1, 4);
         XWPFTableRow row = table.getRow(0);
@@ -51,12 +49,12 @@ public class MyDocxView extends AbstractDocxView {
             newRow.getCell(2).setText(Long.toString(item.getCount()));
             newRow.getCell(3).setText(item.getCost().multiply(BigDecimal.valueOf(item.getCount())).toPlainString());
         }
-        table.createRow().getCell(3).setText("Итого: "+" "+commercialOffer.getCurrency().getSymbol()+" "+commercialOffer.getTotalPrice());
+        table.createRow().getCell(3).setText("Итого: " + " " + commercialOffer.getCurrency().getSymbol() + " " + commercialOffer.getTotalPrice());
 
         CurrencyRatesService currencyRatesService = commercialOffer.getCurrencyRatesService();
         Date currencyRateTime = currencyRatesService.getTime();
-        String currencyRateTimeString = currencyRateTime.getDay()+"."+currencyRateTime.getMonth()+"."+currencyRateTime.getYear();
-        document.createParagraph().createRun().setText("ЦБ РФ на "+currencyRateTimeString+": 1$ = "+currencyRatesService.getUSD()+"₽ / 1€ = "+currencyRatesService.getEUR()+"₽");
+        String currencyRateTimeString = currencyRateTime.getDay() + "." + currencyRateTime.getMonth() + "." + currencyRateTime.getYear();
+        document.createParagraph().createRun().setText("ЦБ РФ на " + currencyRateTimeString + ": 1$ = " + currencyRatesService.getUSD() + "₽ / 1€ = " + currencyRatesService.getEUR() + "₽");
 
         document.createParagraph().createRun().setText("Срок действия предложения 1 месяц. Все цены с учетом НДС. Отгрузка с нашего склада. В стоимость оборудования не входят транспортировка, пуско-наладка, монтажные работы, командировочные расходы.");
         document.createParagraph().createRun().setText("С уважением и надеждой на сотрудничество,\n" +
