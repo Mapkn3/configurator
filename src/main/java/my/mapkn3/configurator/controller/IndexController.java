@@ -4,7 +4,7 @@ import my.mapkn3.configurator.CurrencyRates.CurrencyRatesService;
 import my.mapkn3.configurator.model.CommercialOffer;
 import my.mapkn3.configurator.model.CurrencyEntity;
 import my.mapkn3.configurator.model.ItemEntity;
-import my.mapkn3.configurator.view.MyDocxView;
+import my.mapkn3.configurator.view.MyDocView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -126,7 +126,7 @@ public class IndexController extends MainController {
     public ModelAndView generateCommercialOffer() {
         Map<String, Object> model = new HashMap<>();
         model.put("commercialOffer", commercialOffer);
-        return new ModelAndView(new MyDocxView(), model);
+        return new ModelAndView(new MyDocView(), model);
     }
 
     @RequestMapping(value = "/discount", params = {"plus"}, method = RequestMethod.POST)
