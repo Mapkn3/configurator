@@ -35,6 +35,7 @@ public class CommercialOffer {
 
     public void setCurrency(CurrencyEntity currency) {
         this.currency = currency;
+        updateCostForCurrentCurrencyForAllItems();
     }
 
     public BigDecimal getDiscount() {
@@ -105,27 +106,20 @@ public class CommercialOffer {
         }
     }
 
+    public BigDecimal calculateWithDiscount(BigDecimal price) {
+        BigDecimal discountNormalize = discount.divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP);
+        BigDecimal discountValue = price.multiply(discountNormalize);
+        BigDecimal totalPrice = price.add(discountValue);
+        return totalPrice;
+    }
+
     public BigDecimal getTotalPrice() {
         updateCostForCurrentCurrencyForAllItems();
         BigDecimal price = items.stream()
                 .map(item -> item.getCostForCurrentCurrency().multiply(BigDecimal.valueOf(item.count)))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-        BigDecimal discountNormalize = discount.divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP);
-        BigDecimal discountValue = price.multiply(discountNormalize);
-        BigDecimal totalPrice = price.add(discountValue);
+        BigDecimal totalPrice = calculateWithDiscount(price);
         return totalPrice.setScale(2, RoundingMode.HALF_UP);
-        /*return items.stream()
-                .map(item -> item.getCurrency().getName().equals("EUR") ?
-                        item.getCost().multiply(currencyRatesService.getEUR()).multiply(BigDecimal.valueOf(item.count)) :
-                        item.getCurrency().getName().equals("USD") ?
-                                item.getCost().multiply(currencyRatesService.getUSD()).multiply(BigDecimal.valueOf(item.count)) :
-                                item.getCost().multiply(BigDecimal.valueOf(item.count)))
-                .map(cost -> currency.getName().equals("EUR") ?
-                        cost.divide(currencyRatesService.getEUR(), 6, RoundingMode.HALF_UP) :
-                        currency.getName().equals("USD") ?
-                                cost.divide(currencyRatesService.getUSD(), 6, RoundingMode.HALF_UP) :
-                                cost)
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO).setScale(2, RoundingMode.HALF_UP);*/
     }
 
     public static class Item {

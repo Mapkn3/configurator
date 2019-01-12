@@ -55,7 +55,7 @@
                     <tr th:each="item:${commercialOffer.items}">
                         <td th:text="${item.model}">Модель</td>
                         <td th:text="${item.article}">Артикул</td>
-                        <td th:text="${item.cost+item.currency.symbol+' ('+item.costForCurrentCurrency+commercialOffer.currency.symbol+')'}">
+                        <td th:text="${commercialOffer.calculateWithDiscount(item.cost).setScale(2, 4)+item.currency.symbol+' ('+commercialOffer.calculateWithDiscount(item.costForCurrentCurrency).setScale(2, 4)+commercialOffer.currency.symbol+')'}">
                             Цена
                         </td>
                         <td>
@@ -67,7 +67,7 @@
                             <form th:action="@{'add/'+${item.id}}" method="post" th:id="${'add'+item.id}"></form>
                             <form th:action="@{'remove/'+${item.id}}" method="post" th:id="${'remove'+item.id}"></form>
                         </td>
-                        <td th:text="${(item.cost*item.count)+item.currency.symbol+' ('+(item.costForCurrentCurrency*item.count)+commercialOffer.currency.symbol+')'}">
+                        <td th:text="${(commercialOffer.calculateWithDiscount(item.cost).setScale(2, 4)*item.count)+item.currency.symbol+' ('+(commercialOffer.calculateWithDiscount(item.costForCurrentCurrency).setScale(2, 4)*item.count)+commercialOffer.currency.symbol+')'}">
                             Итоговая стоимость
                         </td>
                     </tr>
