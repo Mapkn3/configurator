@@ -36,16 +36,16 @@ public class MyDocView extends AbstractDocView {
                 TableCell.with(Paragraph.with("Модель").withStyle().align(ParagraphStyle.Align.CENTER).create()).withStyle().bgColor("DDDDDD").create(),
                 TableCell.with(Paragraph.with("Цена").withStyle().align(ParagraphStyle.Align.CENTER).create()).withStyle().bgColor("DDDDDD").create(),
                 TableCell.with(Paragraph.with("Количество").withStyle().align(ParagraphStyle.Align.CENTER).create()).withStyle().bgColor("DDDDDD").create(),
-                TableCell.with(Paragraph.with("Стоимость").withStyle().align(ParagraphStyle.Align.CENTER).create()).withStyle().bgColor("DDDDDD").create())
-                .withStyle().bold().create());
+                TableCell.with(Paragraph.with("Стоимость").withStyle().align(ParagraphStyle.Align.CENTER).create()).withStyle().bgColor("DDDDDD").create()
+        ).withStyle().bold().create());
         List<Paragraph> info;
         for (CommercialOffer.Item item : commercialOffer.getItems()) {
             info = new ArrayList<>();
             info.add(Paragraph.withPieces(
                     ParagraphPiece.with(item.getModel()).withStyle().bold().create(),
-                    ParagraphPiece.with(" (артикул: " + item.getArticle() + ")\n").withStyle().italic().create()
+                    ParagraphPiece.with(" (артикул: " + item.getArticle() + ")").withStyle().italic().create()
             ).create());
-            info.add(Paragraph.withPieces(ParagraphPiece.with(item.getDescription()+"\n").withStyle().italic().create()).create());
+            info.add(Paragraph.withPieces(ParagraphPiece.with(item.getDescription()).withStyle().italic().create()).create());
             info.add(Paragraph.withPieces(ParagraphPiece.with(item.getUrl()).withStyle().italic().create()).create());
             tableV2.addRow(TableRow.with(
                     TableCell.with(info).withStyle().vAlign(true).create(),

@@ -14,7 +14,7 @@
     <a href="newEntity.html" th:href="@{/edit}">Редактировать</a>
 
     <div id="currencyRates" class="my-3">
-        <div th:text="${'Курс валют ЦБ РФ на '+#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')+': '}">Дата
+        <div th:text="${'Курс валют ЦБ РФ на '+#dates.format(currencyRateService.time, 'dd.MM.yyyy HH:mm:ss')+': '}">Дата
         </div>
         <div th:text="${'1$ = '+currencyRateService.getUSD()+'₽ | 1€ = '+currencyRateService.getEUR()+'₽'}"
              class="text-monospace text-success bg-dark d-inline-block py-1 px-2">Курс валют
