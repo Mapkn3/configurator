@@ -20,13 +20,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class MyDocxView extends AbstractDocxView {
+public class MyDocView extends AbstractDocView {
     @Override
-    protected String buildDocxDocument(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) {
+    protected String buildDocDocument(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response, Date time) {
         CommercialOffer commercialOffer = (CommercialOffer) model.get("commercialOffer");
         CurrencyRatesService currencyRatesService = commercialOffer.getCurrencyRatesService();
         Date currencyRateTime = currencyRatesService.getTime();
-        String number = new SimpleDateFormat("ddMMyy - HHmmss").format(new Date());
+        String number = new SimpleDateFormat("ddMMyy - HHmmss").format(time);
         String currencyRateTimeString = new SimpleDateFormat("dd.MM.yyyy").format(currencyRateTime);
         BigDecimal usd = currencyRatesService.getUSD();
         BigDecimal eur = currencyRatesService.getEUR();

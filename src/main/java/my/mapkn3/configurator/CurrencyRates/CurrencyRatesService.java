@@ -50,10 +50,12 @@ public class CurrencyRatesService {
     }
 
     public void updateCurrencyRates(boolean isForce) {
-        Date now = new Date();
+        Date now = new Date(new Date().getTime() + new Date(TimeUnit.HOURS.toMillis(4)).getTime());
         if (isForce || ((now.getTime() - time.getTime()) > TimeUnit.HOURS.toMillis(1))) {
             time = now;
             String addr = "http://www.cbr.ru/scripts/XML_daily.asp";
+            BigDecimal usdTemp = BigDecimal.ONE;
+            BigDecimal eurTemp = BigDecimal.ONE;
             try {
                 URL url = new URL(addr);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -72,10 +74,10 @@ public class CurrencyRatesService {
                     if (firstPersonNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element element = (Element) firstPersonNode;
                         if (getElementValue(element, "CharCode").equals("USD")) {
-                            this.usd = new BigDecimal(getElementValue(element, "Value").replace(',', '.'));
+                            usdTemp = new BigDecimal(getElementValue(element, "Value").replace(',', '.'));
                         }
                         if (getElementValue(element, "CharCode").equals("EUR")) {
-                            this.eur = new BigDecimal(getElementValue(element, "Value").replace(',', '.'));
+                            eurTemp = new BigDecimal(getElementValue(element, "Value").replace(',', '.'));
                         }
                         log.info(getElementValue(element, "NumCode") + ", "
                                 + getElementValue(element, "CharCode") + ", "
@@ -85,9 +87,14 @@ public class CurrencyRatesService {
                 }
                 conn.disconnect();
             } catch (IOException | ParserConfigurationException | SAXException ex) {
-                this.usd = BigDecimal.ONE;
-                this.eur = BigDecimal.ONE;
                 log.error(ex.getMessage());
+            } finally {
+                if (!usdTemp.equals(BigDecimal.ONE)) {
+                    this.usd = usdTemp;
+                }
+                if (!eurTemp.equals(BigDecimal.ONE)) {
+                    this.eur = eurTemp;
+                }
             }
         }
     }
