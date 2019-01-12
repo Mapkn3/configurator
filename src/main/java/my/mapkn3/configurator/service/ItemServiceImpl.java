@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.mapkn3.configurator.model.*;
 import my.mapkn3.configurator.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +66,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemEntity> getAllItems() {
-        List<ItemEntity> items = itemRepository.findAll();
+        List<ItemEntity> items = itemRepository.findAll(Sort.by("series", "group", "model"));
         log.info(String.format("Get %d items:", items.size()));
         /*
         for (ItemEntity item : items) {
