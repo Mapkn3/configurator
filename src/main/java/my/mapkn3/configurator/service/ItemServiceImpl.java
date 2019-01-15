@@ -163,6 +163,9 @@ public class ItemServiceImpl implements ItemService {
             log.info(String.format("Item already exist:%n%s", entity.toString()));
             return entity;
         } else {
+            item.setSeries(item.getGroup().getSeries());
+            item.setFactory(item.getGroup().getSeries().getFactory());
+            item.setType(item.getGroup().getSeries().getFactory().getType());
             log.info(String.format("Add new item:%n%s", item.toString()));
             ItemEntity newItem = itemRepository.saveAndFlush(item);
             log.info(String.format("Id for new item: %d", newItem.getId()));
@@ -172,6 +175,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemEntity updateItem(ItemEntity item) {
+        item.setSeries(item.getGroup().getSeries());
+        item.setFactory(item.getGroup().getSeries().getFactory());
+        item.setType(item.getGroup().getSeries().getFactory().getType());
         ItemEntity updatedItem = itemRepository.saveAndFlush(item);
         log.info(String.format("Updated item:%n%s", updatedItem.toString()));
         return updatedItem;
