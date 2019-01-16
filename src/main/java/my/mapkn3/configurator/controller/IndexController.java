@@ -32,6 +32,11 @@ public class IndexController extends MainController {
         currencyRatesService.updateCurrencyRates(false);
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showAll(ModelMap model) {
         currencyRatesService.updateCurrencyRates(false);
