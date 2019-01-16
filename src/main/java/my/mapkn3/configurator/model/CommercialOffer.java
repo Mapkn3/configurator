@@ -93,11 +93,11 @@ public class CommercialOffer {
     public BigDecimal getCostForCurrency(CurrencyEntity oldCurrency, CurrencyEntity newCurrency, BigDecimal cost) {
         BigDecimal multiplier = getCurrencyRateForCurrency(oldCurrency);
         BigDecimal divider = getCurrencyRateForCurrency(newCurrency);
-        return cost.multiply(multiplier).divide(divider, 6, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
+        return cost.multiply(multiplier).divide(divider, 2, RoundingMode.HALF_UP);
     }
 
     public void updateCostForCurrentCurrency(Item item) {
-        item.setCostForCurrentCurrency(getCostForCurrency(item.getCurrency(), currency, item.getCost().setScale(2, RoundingMode.HALF_UP)));
+        item.setCostForCurrentCurrency(getCostForCurrency(item.getCurrency(), currency, item.getCost()));
     }
 
     public void updateCostForCurrentCurrencyForAllItems() {
@@ -107,10 +107,10 @@ public class CommercialOffer {
     }
 
     public BigDecimal calculateWithDiscount(BigDecimal price) {
-        BigDecimal discountNormalize = discount.divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP);
+        BigDecimal discountNormalize = discount.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
         BigDecimal discountValue = price.multiply(discountNormalize);
         BigDecimal totalPrice = price.add(discountValue);
-        return totalPrice;
+        return totalPrice.setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getTotalPrice() {
@@ -119,7 +119,7 @@ public class CommercialOffer {
                 .map(item -> item.getCostForCurrentCurrency().multiply(BigDecimal.valueOf(item.count)))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
         BigDecimal totalPrice = calculateWithDiscount(price);
-        return totalPrice.setScale(2, RoundingMode.HALF_UP);
+        return totalPrice;
     }
 
     public static class Item {
