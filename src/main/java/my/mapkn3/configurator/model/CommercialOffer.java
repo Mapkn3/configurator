@@ -93,7 +93,7 @@ public class CommercialOffer {
     public BigDecimal getCostForCurrency(CurrencyEntity oldCurrency, CurrencyEntity newCurrency, BigDecimal cost) {
         BigDecimal multiplier = getCurrencyRateForCurrency(oldCurrency);
         BigDecimal divider = getCurrencyRateForCurrency(newCurrency);
-        return cost.multiply(multiplier).divide(divider, 6, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
+        return cost.setScale(2, RoundingMode.HALF_UP).multiply(multiplier).divide(divider, 6, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
     }
 
     public void updateCostForCurrentCurrency(Item item) {
